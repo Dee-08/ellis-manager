@@ -33,6 +33,8 @@ const journey = [
 export default function Landing() {
   const video = useRef(null);
   const menu = useRef(null);
+  const root = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [started, setStarted] = useState(false);
@@ -47,12 +49,34 @@ export default function Landing() {
     motion.addEventListener("change", apply);
     return () => motion.removeEventListener("change", apply);
   }, []);
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 60);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries)
+          if (entry.isIntersecting) {
+            entry.target.classList.add("el-entered");
+            observer.unobserve(entry.target);
+          }
+      },
+      { threshold: 0.12 },
+    );
+    root.current
+      ?.querySelectorAll(".el-intro-copy, .el-explore, .el-story")
+      .forEach((el) => observer.observe(el));
+    return () => {
+      window.removeEventListener("scroll", update);
+      observer.disconnect();
+    };
+  }, []);
   const toggleVideo = () => {
     if (playing) video.current?.pause();
     else video.current?.play().catch(() => setMediaError(true));
   };
   return (
-    <div className="ellis-landing">
+    <div ref={root} className="ellis-landing">
       <a className="skip" href="#landing-main">
         Skip to content
       </a>
@@ -76,7 +100,7 @@ export default function Landing() {
           <source src="/video/hero.mp4" type="video/mp4" />
         </video>
         <header
-          className="el-header"
+          className={"el-header" + (scrolled ? " is-scrolled" : "")}
           onKeyDown={(e) => {
             if (e.key === "Escape") {
               setOpen(false);
@@ -121,7 +145,7 @@ export default function Landing() {
           href="#landing-main"
           aria-label="Explore Ellis"
         >
-          ↓
+          Discover Ellis
         </a>
         <button
           className="el-playback"
@@ -145,9 +169,9 @@ export default function Landing() {
             />
             <div className="el-intro-copy">
               <h2 id="intro-title">
-                Good care takes people.
+                Keep track of the work
                 <br />
-                Keeping it moving takes clarity.
+                between consultations.
               </h2>
               <div className="el-body-copy">
                 <p>
@@ -163,21 +187,21 @@ export default function Landing() {
                   follow-up.
                 </p>
                 <a className="el-inline" href="/how-it-works">
-                  Meet Ellis <span>↗</span>
+                  Meet Ellis
                 </a>
               </div>
             </div>
           </div>
           <div className="el-mosaic">
             <div className="el-mosaic-column">
-              <div className="el-principle">
-                <span>01 / Clarity</span>
-                <p>
-                  See what
-                  <br />
-                  comes next.
-                </p>
-              </div>
+              <img
+                className="el-window-photo"
+                src="/photography/window-clinician.webp"
+                width="1536"
+                height="1024"
+                alt="Clinician holding a coffee and checking her phone by a window"
+                loading="lazy"
+              />
               <img
                 src="/photography/laboratory.webp"
                 width="1536"
@@ -200,8 +224,15 @@ export default function Landing() {
               <div className="el-caption">
                 A shared view of what needs doing.
               </div>
-              <a className="el-lime-link" href="/how-it-works">
-                See how it works <span>↗</span>
+              <a className="el-photo-link" href="/how-it-works">
+                <img
+                  src="/photography/coffee-clinician.webp"
+                  width="1529"
+                  height="1028"
+                  alt="Clinician holding a coffee and phone in a hallway"
+                  loading="lazy"
+                />
+                <span>See how Ellis works</span>
               </a>
             </div>
           </div>
@@ -220,12 +251,21 @@ export default function Landing() {
 
         <section className="el-explore" aria-labelledby="explore-title">
           <h2 id="explore-title">
-            Your practice.
+            Choose where
             <br />
-            Your way of working.
+            you’ll use Ellis.
           </h2>
           <div className="el-programmes">
             <a className="el-programme" href="/sign-up?kind=personal">
+              <div className="el-programme-photo">
+                <img
+                  src="/photography/laboratory.webp"
+                  width="1536"
+                  height="1024"
+                  alt="Clinician working at a laboratory microscope"
+                  loading="lazy"
+                />
+              </div>
               <span className="el-kicker">01 / Independent practice</span>
               <h3>
                 For my
@@ -233,15 +273,23 @@ export default function Landing() {
                 personal practice
               </h3>
               <p>
-                Your patients. Your next steps.
-                <br />A clear place to work on your own.
+                Manage your patient visits and follow-ups in your own practice
+                account.
               </p>
               <div className="el-programme-end">
                 <span>Choose personal practice</span>
-                <span>↗</span>
               </div>
             </a>
             <a className="el-programme" href="/sign-up?kind=clinic">
+              <div className="el-programme-photo">
+                <img
+                  src="/photography/care.webp"
+                  width="1531"
+                  height="1027"
+                  alt="Veterinarian and assistant examining a terrier"
+                  loading="lazy"
+                />
+              </div>
               <span className="el-kicker">02 / Clinic or hospital</span>
               <h3>
                 For my
@@ -254,10 +302,18 @@ export default function Landing() {
               </p>
               <div className="el-programme-end">
                 <span>Choose clinic</span>
-                <span>↗</span>
               </div>
             </a>
             <a className="el-programme" href="/how-it-works">
+              <div className="el-programme-photo">
+                <img
+                  src="/photography/phone-clinician.webp"
+                  width="1562"
+                  height="1007"
+                  alt="Clinician speaking on the phone at his desk"
+                  loading="lazy"
+                />
+              </div>
               <span className="el-kicker">03 / A closer look</span>
               <h3>
                 From arrival
@@ -270,7 +326,6 @@ export default function Landing() {
               </p>
               <div className="el-programme-end">
                 <span>Explore the workflow</span>
-                <span>↗</span>
               </div>
             </a>
           </div>
@@ -290,14 +345,14 @@ export default function Landing() {
                   <span className="el-outline">{subtitle}</span>
                 </span>
                 <span className="el-disclosure" aria-hidden="true">
-                  ↗
+                  +
                 </span>
               </summary>
               <p>{copy}</p>
             </details>
           ))}
           <a className="el-more" href="/how-it-works">
-            Explore Ellis <span>↗</span>
+            Explore Ellis
           </a>
         </section>
 
@@ -305,19 +360,17 @@ export default function Landing() {
           <div>
             <span className="el-kicker">The thinking behind Ellis</span>
             <h2 id="story-title">
-              Care is a sequence.
+              Built around
               <br />
-              Every next step
-              <br />
-              matters.
+              the working day.
             </h2>
             <p>
-              We’re building Ellis around the everyday work of veterinary
-              practice. Less uncertainty about what is outstanding. A clearer
-              sense of who is taking it forward.
+              Ellis is a Hub Animalia project for veterinary practices. It keeps
+              outstanding work attached to a patient, with a named person
+              responsible for the next step.
             </p>
             <a className="el-inline" href="/about">
-              Our story <span>↗</span>
+              Our story
             </a>
             <span className="el-story-credit">A product of Hub Animalia</span>
           </div>
@@ -338,9 +391,7 @@ export default function Landing() {
             <br />
             moving.
           </h2>
-          <a href="/choose-account">
-            Create your account <span>↗</span>
-          </a>
+          <a href="/choose-account">Create your account</a>
         </div>
         <div className="el-footer-grid">
           <div>
@@ -366,7 +417,7 @@ export default function Landing() {
           </nav>
           <div>
             <span className="el-kicker">Let’s talk</span>
-            <a href="mailto:hubanimalia@gmail.com">hubanimalia@gmail.com ↗</a>
+            <a href="mailto:hubanimalia@gmail.com">hubanimalia@gmail.com</a>
             <p>
               Questions about Ellis?
               <br />
@@ -385,7 +436,7 @@ export default function Landing() {
             />
           </span>
           <span>Clarity. Accountability. Follow-through.</span>
-          <a href="#">Back to top ↑</a>
+          <a href="#">Back to top</a>
         </div>
       </footer>
     </div>

@@ -6,6 +6,11 @@
 }
 .ellis-landing a {
   text-decoration: none;
+  scroll-margin-top: 100px;
+}
+.ellis-landing summary,
+.ellis-landing h2 {
+  scroll-margin-top: 100px;
 }
 .ellis-landing button {
   border-radius: 0;
@@ -749,5 +754,287 @@
   .ellis-landing * {
     scroll-behavior: auto;
     transition: none;
+  }
+}
+/* Photography-led refinement: imagery replaces promotional colour panels. */
+.el-header {
+  position: fixed;
+  z-index: 30;
+  align-items: center;
+  transition:
+    background-color 250ms ease,
+    padding 250ms ease,
+    box-shadow 250ms ease;
+  animation: el-nav-arrive 450ms ease-out both;
+}
+.el-header.is-scrolled {
+  background: #042617;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  box-shadow: 0 1px 0 #ffffff25;
+}
+.el-wordmark img {
+  transition: width 250ms ease;
+}
+.el-header.is-scrolled .el-wordmark img {
+  width: 90px;
+}
+.el-header nav {
+  padding-top: 0;
+}
+.el-header nav a {
+  position: relative;
+  border-bottom: 0;
+  padding: 12px 0;
+}
+.el-header nav a::after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  background: #74d600;
+  left: 0;
+  right: 0;
+  bottom: 5px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+.el-header nav a:hover::after,
+.el-header nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+.el-scroll {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 14px;
+  white-space: nowrap;
+}
+#landing-main {
+  scroll-margin-top: 75px;
+}
+.el-mosaic {
+  background: #fff;
+  color: #042617;
+}
+.el-mosaic .el-window-photo {
+  height: 23vw;
+  object-position: 32% center;
+}
+.el-photo-link {
+  display: block;
+  overflow: hidden;
+  margin-top: auto;
+}
+.el-photo-link img {
+  height: 23vw;
+  object-position: 70% center;
+  transition: transform 450ms ease;
+}
+.el-photo-link > span {
+  display: block;
+  padding: 24px 12%;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.el-photo-link:hover img {
+  transform: scale(1.025);
+}
+.el-programmes {
+  column-gap: 24px;
+}
+.el-programme,
+.el-programme:hover {
+  background: transparent;
+  color: #042617;
+  padding: 0 0 20px;
+  min-height: 0;
+}
+.el-programme-photo {
+  overflow: hidden;
+  width: 100%;
+}
+.el-programme-photo img {
+  width: 100%;
+  height: 22vw;
+  max-height: 360px;
+  object-position: center;
+  transition: transform 450ms ease;
+}
+.el-programme:nth-child(3) .el-programme-photo img {
+  object-position: 45% center;
+}
+.el-programme:hover .el-programme-photo img {
+  transform: scale(1.035);
+}
+.el-programme > .el-kicker {
+  margin-top: 22px;
+}
+.el-programme h3 {
+  margin: 20px 0;
+}
+.el-programme p {
+  max-width: 340px;
+}
+.el-programme-end {
+  padding-top: 24px;
+  font-size: 12px;
+  text-transform: none;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+.el-programme-end > span:last-child {
+  font-size: inherit;
+}
+.el-inline {
+  width: fit-content;
+  min-width: 130px;
+  transition: color 180ms ease;
+}
+.el-inline:hover {
+  color: #407900;
+}
+.el-more {
+  font-size: 18px;
+  text-decoration: underline !important;
+  text-underline-offset: 7px;
+}
+.el-disclosure {
+  font-size: 24px;
+  transition: transform 180ms ease;
+}
+.el-journey details[open] .el-disclosure {
+  transform: rotate(45deg);
+}
+.el-story h2 {
+  max-width: 650px;
+}
+.el-footer a {
+  transition: color 180ms ease;
+}
+.el-footer a:hover {
+  color: #74d600;
+}
+.el-entered {
+  animation: el-section-arrive 450ms ease-out both;
+}
+@keyframes el-nav-arrive {
+  from {
+    opacity: 0.5;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes el-section-arrive {
+  from {
+    opacity: 0.65;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 900px) {
+  .el-mosaic .el-window-photo {
+    height: 32vw;
+  }
+  .el-photo-link img {
+    height: 32vw;
+  }
+  .el-programmes {
+    gap: 18px;
+  }
+  .el-programme h3 {
+    font-size: 27px;
+  }
+}
+@media (max-width: 640px) {
+  .el-header.is-scrolled {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .el-header nav,
+  .el-header nav.is-open {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #042617;
+    padding: 16px 22px 24px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    border-bottom: 1px solid #74d600;
+    transition:
+      opacity 220ms ease,
+      transform 220ms ease,
+      visibility 220ms;
+  }
+  .el-header nav {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-12px);
+    pointer-events: none;
+  }
+  .el-header nav.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .el-header nav a {
+    padding: 15px 0;
+    font-size: 17px;
+  }
+  .el-mosaic .el-window-photo {
+    height: 65vw;
+  }
+  .el-photo-link img {
+    height: 65vw;
+  }
+  .el-photo-link > span {
+    padding: 20px;
+  }
+  .el-programmes {
+    gap: 34px;
+  }
+  .el-programme,
+  .el-programme:nth-child(2),
+  .el-programme:nth-child(3) {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    transform: none;
+    min-height: 0;
+  }
+  .el-programme-photo img {
+    height: 70vw;
+    max-height: 420px;
+  }
+  .el-programme > .el-kicker {
+    margin-top: 20px;
+  }
+  .el-programme h3 {
+    font-size: 32px;
+  }
+  .el-account-note {
+    margin-top: 36px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ellis-landing *,
+  .ellis-landing *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .el-programme:hover img,
+  .el-photo-link:hover img {
+    transform: none;
   }
 }

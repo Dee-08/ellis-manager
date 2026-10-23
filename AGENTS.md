@@ -51,3 +51,7 @@ These are project instructions, subject to platform/system constraints and the u
 33. Do not declare completion because the build passes. Verify browser flows, deployed APIs, durable records across refresh/restart and intended responsive layouts. State exactly which checks ran and which did not.
 34. Produce a concise release report with commit, repo URL, deployment URL, working features, test evidence, known limits and rollback steps. Say “frontend preview” if that is all that works.
 35. Marketing expansion follows functional delivery. Keep a future marketing backlog; do not spend V1 effort on analytics subscriptions, campaigns or invented commercial offers.
+
+## Ongoing visual guidance
+
+For Ellis design and copy changes, read HUMAN_DESIGN_GUIDE.md alongside the current brief. It records the user's photography-led direction, reduced decorative arrows and restrained motion preferences. Later user instructions take precedence.
