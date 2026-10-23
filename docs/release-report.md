@@ -5,7 +5,7 @@ Status: functional local full-stack pilot for synthetic data. Public production 
 ## Delivery
 
 - Local preview: http://127.0.0.1:5173 ; API: http://127.0.0.1:3001/api/health . Processes must be running; setup is in operations.md.
-- Source revision: see the local Git milestone commits (`git log --oneline`). Final handoff records the commit hash. Repository URL: unavailable; GitHub CLI is signed out and no connected GitHub tool is available. No remote was created or pushed.
+- Tested implementation commit: `dc3a040` (local Git). Subsequent documentation-only commit records this identifier. Repository URL: unavailable; GitHub CLI is signed out and no connected GitHub tool is available. No remote was created or pushed.
 - Deployment URL: unavailable. User confirmed no existing PostgreSQL resource or eligible Vercel team/plan. No infrastructure, trial, subscription or paid dependency was purchased. Vercel configuration is prepared but has not been platform-tested.
 
 ## Implemented
