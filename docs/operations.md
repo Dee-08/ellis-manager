@@ -53,3 +53,9 @@ Staff activation uses a 24-hour single-use hashed token. Administrators create a
 Owner password recovery is a production blocker: no verified email channel or identity-checked manual recovery policy is available. There is no insecure email-only reset or administrator backdoor. Do not admit real clinical data until owner recovery, retention/export/closure handling, reviewed privacy contact and backup responsibilities are agreed. Exports are permission checked, account scoped, no-store JSON pages of up to 500 records with nextOffset.
 
 No third-party analytics/error subscription is installed. APIs return safe error messages. Audit history captures actor/action/entity/time and minimal transition metadata; never passwords, tokens or note bodies. A production operator must configure server error monitoring, log access controls, retention and alerts without collecting unnecessary clinical content. These are operational gates, not compliance claims.
+
+## Personal design review deployment
+
+User selected https://github.com/Dee-08/ellis-manager and clarified the requested deployment is a personal review link. The Vercel configuration now runs pnpm build:review, which explicitly disables account and patient routes and server calls. The deployment upload excludes api/server/db, local credentials, databases and source references; no SQL or paid infrastructure is provisioned. The ordinary pnpm build and local backend still support full-stack development. X-Robots-Tag discourages indexing but is not access control.
+
+Source was successfully pushed to origin/master. Vercel's connected integration denies team scope; the signed-in browser shows the intended Hubb Hobby account. Browser project creation is awaiting user handling of its 2FA setup prompt. Do not claim a deployed URL until the build and live route checks pass.

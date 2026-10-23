@@ -1,8 +1,17 @@
 {
-  "buildCommand": "pnpm build",
+  "buildCommand": "pnpm build:review",
+  "installCommand": "pnpm install --frozen-lockfile --ignore-scripts",
   "outputDirectory": "dist",
   "rewrites": [
-    {"source":"/api/:path*","destination":"/api"},
-    {"source":"/((?!api/|assets/|brand/|photography/).*)","destination":"/index.html"}
+    {
+      "source": "/((?!assets/|brand/|photography/|video/).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
   ]
 }

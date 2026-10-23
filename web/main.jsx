@@ -522,6 +522,25 @@ function Auth() {
   );
 }
 function App() {
+  if (
+    import.meta.env.VITE_REVIEW_MODE === "true" &&
+    (path.startsWith("/app") ||
+      ["/sign-up", "/sign-in", "/activate", "/recovery"].includes(path))
+  )
+    return (
+      <>
+        <Header />
+        <main className="section">
+          <h1>Design review only.</h1>
+          <p>
+            This shared preview has no account services or patient database.
+            Please use it to review the public website.
+          </p>
+          <a href="/">Return to Ellis</a>
+        </main>
+        <Footer />
+      </>
+    );
   if (path === "/") return <Landing />;
   if (path.startsWith("/app"))
     return (

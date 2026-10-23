@@ -1,4 +1,8 @@
 export async function api(path, body, method) {
+  if (import.meta.env.VITE_REVIEW_MODE === "true")
+    throw new Error(
+      "Account services are not available in this design preview.",
+    );
   let response;
   try {
     response = await fetch("/api" + path, {

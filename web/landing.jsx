@@ -385,6 +385,11 @@ export default function Landing() {
       </main>
 
       <footer className="el-footer">
+        {import.meta.env.VITE_REVIEW_MODE === "true" && (
+          <p className="el-review-notice">
+            Personal design preview · Account services are not enabled.
+          </p>
+        )}
         <div className="el-footer-top">
           <h2>
             Keep care

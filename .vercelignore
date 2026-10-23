@@ -1,0 +1,17 @@
+.git
+.env*
+.local
+.pnpm-store
+node_modules
+tmp
+references
+assets
+brand
+brief
+api
+server
+db
+tests
+scripts/local-postgres.js
+scripts/seed-demo.js
+scripts/verify-restore.js

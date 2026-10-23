@@ -7,6 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "server": "node --env-file=.env server/index.js",
     "build": "vite build",
+    "build:review": "node scripts/build-review.js",
     "start": "node --env-file=.env server/index.js",
     "migrate": "node --env-file=.env db/migrate.js",
     "test": "node --env-file=.env --test tests/*.test.js",
