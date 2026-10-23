@@ -6,6 +6,7 @@ const Workspace = lazy(() =>
   import("./workspace").then((m) => ({ default: m.Workspace })),
 );
 import "./styles.css";
+import Landing from "./landing";
 const path = window.location.pathname;
 export function Logo({ dark = false }) {
   return (
@@ -202,152 +203,6 @@ function Choices({ standalone = false }) {
         automatically linked.
       </p>
     </section>
-  );
-}
-function Preview() {
-  return (
-    <div className="product-preview">
-      <div className="preview-heading">
-        <b>Today</b>
-        <span>Illustrative preview · fictional data</span>
-      </div>
-      <div className="preview-row">
-        <div>
-          <strong>Check on Milo’s recovery</strong>
-          <small>Milo · Follow-up</small>
-        </div>
-        <span>Dr Ada</span>
-        <span>Due 14:00</span>
-        <b className="status">Open</b>
-      </div>
-      <div className="preview-row">
-        <div>
-          <strong>Review pending result</strong>
-          <small>Luna · Visit ended</small>
-        </div>
-        <span>Dr Ada</span>
-        <span>Due 16:00</span>
-        <b className="status">In progress</b>
-      </div>
-      <p>Outstanding work stays visible after the visit ends.</p>
-    </div>
-  );
-}
-function Home() {
-  return (
-    <>
-      <section className="hero">
-        <div className="hero-copy">
-          <span className="eyebrow">For the people behind every patient</span>
-          <h1>
-            Keep care
-            <br />
-            moving<span className="lime-text">.</span>
-          </h1>
-          <p>
-            Know what needs doing, who is responsible, and what is complete —
-            from arrival to follow-up.
-          </p>
-          <div className="actions">
-            <a className="button lime" href="/choose-account">
-              Create account <span>↗</span>
-            </a>
-            <a className="text-link" href="#how-it-works">
-              See how Ellis works <span>↓</span>
-            </a>
-          </div>
-        </div>
-        <div className="hero-photo">
-          <img
-            src="/photography/consultation.webp"
-            width="1531"
-            height="1027"
-            alt="Veterinarian examining a terrier with a colleague in a consultation room"
-          />
-          <span>
-            Care has a next step.
-            <br />
-            Make it clear.
-          </span>
-        </div>
-      </section>
-      <div className="preview-wrap">
-        <Preview />
-      </div>
-      <section className="section introduction">
-        <span className="eyebrow">The work between the moments</span>
-        <div>
-          <h2>
-            A patient arrives.
-            <br />A result is waiting.
-            <br />
-            Someone needs to follow up.
-          </h2>
-          <p>
-            Good care depends on what happens next. Ellis brings
-            responsibilities and outstanding work into view, so the next step
-            has someone looking after it.
-          </p>
-        </div>
-      </section>
-      <Stages />
-      <section className="photo-story">
-        <img
-          src="/photography/team.webp"
-          width="1536"
-          height="1024"
-          loading="lazy"
-          alt="Two clinicians reviewing information on a tablet"
-        />
-        <div>
-          <span className="eyebrow">Clarity, together</span>
-          <h2>
-            Responsibility
-            <br />
-            that stays visible.
-          </h2>
-          <p>
-            Work alone or with a team. Keep a clear record of who owns an
-            action, what changed and what still needs attention.
-          </p>
-          <a className="text-link" href="/how-it-works">
-            Explore the care journey ↗
-          </a>
-        </div>
-      </section>
-      <Choices />
-      <section className="section faq">
-        <h2>
-          A few things
-          <br />
-          worth knowing.
-        </h2>
-        <div>
-          <details>
-            <summary>Can I use a clinic account on my own?</summary>
-            <p>
-              Yes. Staff setup is optional. You can register patients, manage
-              visits and follow up on your own.
-            </p>
-          </details>
-          <details>
-            <summary>Does Ellis replace my clinical record?</summary>
-            <p>
-              This pilot is a coordination companion. Keep your authoritative
-              clinical documentation in your existing system.
-            </p>
-          </details>
-          <details>
-            <summary>Do staff need a particular job title?</summary>
-            <p>
-              No. Titles are optional descriptions. Explicit permissions
-              determine access.
-            </p>
-          </details>
-        </div>
-      </section>
-      <CTA />
-    </>
   );
 }
 function About() {
@@ -667,6 +522,7 @@ function Auth() {
   );
 }
 function App() {
+  if (path === "/") return <Landing />;
   if (path.startsWith("/app"))
     return (
       <Suspense
@@ -680,8 +536,7 @@ function App() {
       </Suspense>
     );
   let page;
-  if (path === "/") page = <Home />;
-  else if (path === "/choose-account") page = <Choices standalone />;
+  if (path === "/choose-account") page = <Choices standalone />;
   else if (["/sign-up", "sign-in", "/sign-in", "/activate"].includes(path))
     page = <Auth />;
   else if (path === "/about") page = <About />;
@@ -738,3 +593,5 @@ function App() {
 createRoot(document.getElementById("root")).render(<App />);
 
 import "./workspace.css";
+
+import "./landing.css";
