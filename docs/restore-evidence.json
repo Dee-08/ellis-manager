@@ -1,0 +1,28 @@
+{
+  "testedAt": "2026-10-23T00:32:32.805Z",
+  "method": "Cleanly stopped PostgreSQL physical copy, booted separately on loopback port 55433",
+  "expected": {
+    "accounts": 8,
+    "principals": 13,
+    "patients": 5,
+    "clients": 5,
+    "visits": 5,
+    "notes": 4,
+    "tasks": 4,
+    "audit_events": 55,
+    "session": 13
+  },
+  "actual": {
+    "accounts": 8,
+    "principals": 13,
+    "patients": 5,
+    "clients": 5,
+    "visits": 5,
+    "notes": 4,
+    "tasks": 4,
+    "audit_events": 55,
+    "session": 13
+  },
+  "passed": true,
+  "limitations": "Same-machine test only. Not an off-site backup, not a production schedule."
+}

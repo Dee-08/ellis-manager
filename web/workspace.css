@@ -1,0 +1,493 @@
+.workspace {
+  display: grid;
+  grid-template-columns: 224px minmax(0, 1fr);
+  min-height: 100vh;
+  background: #f7fbf5;
+}
+.sidebar {
+  background: #042617;
+  color: #f7fbf5;
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar img {
+  object-fit: contain;
+}
+.practice-name {
+  margin: 32px 0 24px;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.sidebar small {
+  display: block;
+  color: #bed0bf;
+}
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.sidebar nav a {
+  text-decoration: none;
+  padding: 13px 12px;
+  margin: 0 -12px;
+  border-radius: 4px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+.sidebar nav a span {
+  opacity: 0;
+}
+.sidebar nav a.selected {
+  background: #22482c;
+}
+.sidebar nav a.selected span {
+  opacity: 1;
+  color: #74d600;
+}
+.identity {
+  margin-top: auto;
+  padding-top: 48px;
+  font-size: 13px;
+}
+.identity button {
+  margin-top: 18px;
+  color: #f7fbf5;
+  background: transparent;
+  border: 1px solid #78917d;
+  min-height: 44px;
+  padding: 8px 16px;
+}
+.work-main {
+  padding: 0 40px 64px;
+  min-width: 0;
+}
+.work-top {
+  min-height: 68px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  border-bottom: 1px solid #d4ded4;
+  font-size: 13px;
+}
+.pilot {
+  font-size: 12px;
+  color: #536359;
+  padding-top: 14px;
+}
+.work-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin: 44px 0 30px;
+}
+.work-heading h1 {
+  font-size: 48px;
+  overflow-wrap: anywhere;
+}
+.work-heading .eyebrow {
+  margin-bottom: 14px;
+}
+.work-heading p {
+  margin-top: 16px;
+  color: #536359;
+  font-size: 15px;
+}
+.work-main button:not(.button):not(.patient-row):not(.task-row) {
+  min-height: 44px;
+  border: 1px solid #9daf9f;
+  padding: 9px 15px;
+  background: white;
+  color: #042617;
+  border-radius: 4px;
+}
+.work-main button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+.filter-bar {
+  display: flex;
+  gap: 20px;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.filter-bar label {
+  min-width: 220px;
+  margin: 0;
+}
+.task-list,
+.record-list {
+  border: 1px solid #d4ded4;
+  background: white;
+}
+.task-list-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+}
+.task-list-title h2 {
+  font-size: 24px;
+}
+.task-list-title > span {
+  font-size: 12px;
+  color: #536359;
+}
+.task-row {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-top: 1px solid #d4ded4;
+  background: white;
+  color: #042617;
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) minmax(100px, 1fr) minmax(
+      130px,
+      1fr
+    ) 90px;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+  font-size: 14px;
+}
+.task-row:hover,
+.patient-row:hover {
+  background: #f0f6e9;
+}
+.task-row small,
+.patient-row small {
+  display: block;
+}
+.task-row strong {
+  font-weight: 500;
+}
+.task-row .overdue,
+.task-row .overdue small {
+  color: #9a391e;
+}
+.empty {
+  padding: 52px 28px;
+  text-align: center;
+}
+.empty p {
+  margin: 14px 0 24px;
+  color: #536359;
+}
+.pagination {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: end;
+  margin-top: 24px;
+  font-size: 12px;
+}
+.search-form {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.search-form label {
+  margin: 0;
+  flex: 1;
+}
+.patient-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 20px;
+  width: 100%;
+  text-align: left;
+  padding: 22px 24px;
+  border: 0;
+  border-bottom: 1px solid #d4ded4;
+  background: white;
+  color: #042617;
+  font-size: 14px;
+}
+.work-form {
+  max-width: 660px;
+  padding: 28px;
+  background: white;
+  border: 1px solid #d4ded4;
+  margin: 28px 0;
+}
+.work-form h3 {
+  font-size: 25px;
+  margin-bottom: 24px;
+}
+.work-form > p {
+  margin-bottom: 20px;
+}
+.work-form .actions {
+  margin-top: 24px;
+}
+.work-form fieldset {
+  border: 1px solid #d4ded4;
+  padding: 20px;
+  margin: 24px 0;
+}
+.work-form legend {
+  padding: 0 8px;
+}
+.success {
+  padding: 14px;
+  background: #e7f5d8;
+  color: #254d14;
+}
+.patient-context {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  padding: 28px 0;
+  border-top: 1px solid #d4ded4;
+  border-bottom: 1px solid #d4ded4;
+}
+.patient-context .eyebrow {
+  margin-bottom: 12px;
+}
+.patient-context h3 {
+  font-size: 24px;
+}
+.patient-context p {
+  font-size: 14px;
+}
+.subheading {
+  font-size: 28px;
+  margin: 36px 0 12px;
+}
+.visit {
+  border: 1px solid #d4ded4;
+  padding: 26px;
+  margin-top: 24px;
+  background: white;
+}
+.visit-heading,
+.note-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+.visit-heading h3 {
+  font-size: 22px;
+}
+.visit .actions {
+  gap: 12px;
+  margin-top: 20px;
+}
+.note {
+  padding: 20px 0;
+  border-top: 1px solid #d4ded4;
+  margin-top: 24px;
+}
+.note-meta {
+  font-size: 12px;
+}
+.note-content {
+  white-space: pre-wrap;
+  margin-top: 16px;
+  font-size: 15px;
+}
+.task-detail {
+  padding: 28px;
+  border: 1px solid #9daf9f;
+  margin-top: 32px;
+  background: #eef4e8;
+}
+.task-detail h2 {
+  font-size: 30px;
+  margin-top: 24px;
+}
+.task-detail > .actions {
+  gap: 12px;
+}
+.team-person {
+  padding: 28px 0;
+  border-top: 1px solid #d4ded4;
+}
+.team-person h3 {
+  font-size: 24px;
+}
+.team-person p {
+  font-size: 14px;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+.team-person .actions {
+  gap: 14px;
+}
+.activation,
+.notice,
+.handover-list {
+  background: #e7efdf;
+  border: 1px solid #c7d8bc;
+  padding: 24px;
+  margin: 24px 0;
+}
+.activation h3,
+.notice h3,
+.handover-list h3 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.activation p,
+.notice p {
+  font-size: 14px;
+}
+.handover-list > div {
+  padding: 20px 0;
+  border-top: 1px solid #c7d8bc;
+}
+.access-summary {
+  font-size: 14px;
+}
+.audit-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 16px;
+  padding: 20px;
+  border-bottom: 1px solid #d4ded4;
+  font-size: 13px;
+}
+.work-main details > summary {
+  min-height: 44px;
+  padding: 12px;
+  cursor: pointer;
+}
+.work-main details {
+  max-width: 100%;
+}
+@media (max-width: 1100px) {
+  .workspace {
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+  .work-main {
+    padding: 0 24px 48px;
+  }
+  .task-row {
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+  }
+  .task-row > .status {
+    justify-self: end;
+  }
+  .work-heading {
+    align-items: start;
+  }
+  .work-heading .button {
+    white-space: nowrap;
+  }
+  .work-heading h1 {
+    font-size: 44px;
+  }
+}
+@media (max-width: 768px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    padding: 16px 24px;
+  }
+  .sidebar > a {
+    align-self: start;
+  }
+  .sidebar .practice-name {
+    margin: 16px 0;
+  }
+  .sidebar nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .sidebar nav a {
+    margin: 0;
+    padding: 12px;
+  }
+  .sidebar nav a span {
+    display: none;
+  }
+  .identity {
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+  }
+  .identity small {
+    display: none;
+  }
+  .identity button {
+    margin: 0 0 0 auto;
+  }
+  .work-top {
+    font-size: 12px;
+  }
+  .work-heading {
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+  .work-heading h1 {
+    font-size: 40px;
+  }
+  .patient-context {
+    grid-template-columns: 1fr;
+  }
+  .visit-heading,
+  .note-meta {
+    align-items: start;
+    flex-wrap: wrap;
+  }
+  .patient-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .patient-row > span:last-child {
+    grid-column: 1/-1;
+  }
+  .audit-row {
+    grid-template-columns: 1fr;
+  }
+  .work-form {
+    padding: 22px;
+  }
+  .filter-bar label {
+    min-width: 0;
+    flex: 1;
+  }
+  .task-detail {
+    padding: 20px;
+  }
+  .task-row {
+    grid-template-columns: 1fr 1fr;
+    padding: 20px;
+  }
+  .task-row > span:first-child {
+    grid-column: 1/-1;
+  }
+  .task-row > .status {
+    justify-self: start;
+  }
+  .task-list-title {
+    padding: 20px;
+  }
+  .task-list-title h2 {
+    font-size: 22px;
+  }
+  .work-main {
+    padding: 0 20px 40px;
+  }
+  .visit {
+    padding: 20px;
+  }
+  .search-form {
+    flex-wrap: wrap;
+  }
+  .search-form label {
+    min-width: 200px;
+  }
+}
