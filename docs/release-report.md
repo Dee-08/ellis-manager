@@ -36,3 +36,15 @@ Uploads, automated messaging, billing, inventory, inpatient care, prescription a
 ## Rollback
 
 Keep the prior application commit/build. Revert application code when schema-compatible; do not reverse migrations or delete records automatically. For schema/data recovery, stop writes, take a fresh backup, restore a prior backup into a separate database, validate and switch only with approval if data loss is possible. See operations.md for setup, backup and recovery details.
+
+## Public-page review update — 24 October 2026
+
+Commit: 97cb2a1 (public-page refresh). Repository: https://github.com/Dee-08/ellis-manager. Canonical personal frontend review: https://ellis-manager.vercel.app. Existing Hubb Hobby project and master Git integration are reused; no resources, services, subscriptions or dependencies added.
+
+Delivered: distinct Growmodo-informed How to use, About us and Contact pages; shared landing navigation/footer across public/account routes; named personal, clinic and clarity photographs; transparent Hub Animalia logo; removed decorative labels/numbers. About uses confirmed source copy and founder quote. How remains a provisional guide.
+
+Evidence: ESLint and Vite review build passed. Browser checked four public routes at 360/390/768/1024/1440 pixels with no horizontal overflow or observed failed images. Reviewed desktop and mobile screenshots, menu/Escape, photo cropping, contact link destinations and footer transparency. Full accessibility certification, field performance and OS reduced-motion emulation were not run. Backend code/schema unchanged and backend tests not repeated for this visual change.
+
+This remains a frontend preview. Public account services and patient data are disabled by the review build. Local backend work remains separate. Rollback: revert 97cb2a1 with a normal new commit and push; or restore the preceding verified Vercel deployment dpl_Fz5kdLHd4LnMnvmoMncvXaUDJ1QL. No database migration is involved. No rollback performed.
+
+Deployment verified READY: dpl_HSFEfMEQ2mGHyw7gDCbwRRhMx5Xn, https://ellis-manager-2k9ezy3gr-hubb6.vercel.app, canonical alias https://ellis-manager.vercel.app. Vite build duration 7.7 seconds; Vercel target production (canonical alias), product scope personal frontend preview. Browser verified live Contact artwork and both wordmarks/transparent logo, About hero, and sign-in review gate with zero forms. No browser console errors observed in this check. Platform runtime log scan/drains monitoring were not configured or claimed; this is a static frontend review.
