@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const links = [
-  ["How it works", "/how-it-works"],
-  ["About", "/about"],
+  ["How to use", "/how-it-works"],
+  ["About us", "/about"],
   ["Contact", "/contact"],
   ["Sign in", "/sign-in"],
   ["Create account", "/choose-account"],
@@ -32,10 +32,7 @@ const journey = [
 
 export default function Landing() {
   const video = useRef(null);
-  const menu = useRef(null);
   const root = useRef(null);
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [started, setStarted] = useState(false);
   const [mediaError, setMediaError] = useState(false);
@@ -50,9 +47,6 @@ export default function Landing() {
     return () => motion.removeEventListener("change", apply);
   }, []);
   useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 60);
-    update();
-    window.addEventListener("scroll", update, { passive: true });
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries)
@@ -67,7 +61,6 @@ export default function Landing() {
       ?.querySelectorAll(".el-intro-copy, .el-explore, .el-story")
       .forEach((el) => observer.observe(el));
     return () => {
-      window.removeEventListener("scroll", update);
       observer.disconnect();
     };
   }, []);
@@ -99,44 +92,7 @@ export default function Landing() {
         >
           <source src="/video/hero.mp4" type="video/mp4" />
         </video>
-        <header
-          className={"el-header" + (scrolled ? " is-scrolled" : "")}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") {
-              setOpen(false);
-              menu.current?.focus();
-            }
-          }}
-        >
-          <a className="el-wordmark" href="/" aria-label="Ellis home">
-            <img
-              src="/brand/wordmark-white.svg"
-              width="108"
-              height="51"
-              alt="Ellis"
-            />
-          </a>
-          <button
-            ref={menu}
-            className="el-menu"
-            aria-controls="landing-navigation"
-            aria-expanded={open}
-            onClick={() => setOpen(!open)}
-          >
-            Menu {open ? "−" : "+"}
-          </button>
-          <nav
-            id="landing-navigation"
-            aria-label="Main"
-            className={open ? "is-open" : ""}
-          >
-            {links.map(([label, href]) => (
-              <a href={href} key={href}>
-                {label}
-              </a>
-            ))}
-          </nav>
-        </header>
+        <PublicHeader />
         <h1 className={started ? "el-sr" : "el-video-fallback"}>
           Keep care moving.
         </h1>
@@ -240,10 +196,10 @@ export default function Landing() {
 
         <figure className="el-wide-photo">
           <img
-            src="/photography/clinicians.webp"
+            src="/photography/clarity.webp"
             width="1536"
             height="1024"
-            alt="Two clinicians discussing the next steps in care"
+            alt="Medical team reviewing documents together"
             loading="lazy"
           />
           <figcaption>Clarity. Accountability. Follow-through.</figcaption>
@@ -259,14 +215,13 @@ export default function Landing() {
             <a className="el-programme" href="/sign-up?kind=personal">
               <div className="el-programme-photo">
                 <img
-                  src="/photography/laboratory.webp"
+                  src="/photography/personal.webp"
                   width="1536"
                   height="1024"
-                  alt="Clinician working at a laboratory microscope"
+                  alt="Veterinarian examining a Sphynx cat"
                   loading="lazy"
                 />
               </div>
-              <span className="el-kicker">01 / Independent practice</span>
               <h3>
                 For my
                 <br />
@@ -283,14 +238,13 @@ export default function Landing() {
             <a className="el-programme" href="/sign-up?kind=clinic">
               <div className="el-programme-photo">
                 <img
-                  src="/photography/care.webp"
+                  src="/photography/clinic.webp"
                   width="1531"
                   height="1027"
-                  alt="Veterinarian and assistant examining a terrier"
+                  alt="Dog with two clinicians during a checkup"
                   loading="lazy"
                 />
               </div>
-              <span className="el-kicker">02 / Clinic or hospital</span>
               <h3>
                 For my
                 <br />
@@ -314,7 +268,6 @@ export default function Landing() {
                   loading="lazy"
                 />
               </div>
-              <span className="el-kicker">03 / A closer look</span>
               <h3>
                 From arrival
                 <br />
@@ -336,13 +289,11 @@ export default function Landing() {
         </section>
 
         <section className="el-journey" aria-label="The care journey">
-          {journey.map(([title, subtitle, copy], i) => (
+          {journey.map(([title, , copy]) => (
             <details key={title}>
               <summary>
-                <span className="el-step-number">0{i + 1}</span>
                 <span>
                   <strong>{title}</strong>
-                  <span className="el-outline">{subtitle}</span>
                 </span>
                 <span className="el-disclosure" aria-hidden="true">
                   +
@@ -358,7 +309,6 @@ export default function Landing() {
 
         <section className="el-story" aria-labelledby="story-title">
           <div>
-            <span className="el-kicker">The thinking behind Ellis</span>
             <h2 id="story-title">
               Built around
               <br />
@@ -384,66 +334,131 @@ export default function Landing() {
         </section>
       </main>
 
-      <footer className="el-footer">
-        {import.meta.env.VITE_REVIEW_MODE === "true" && (
-          <p className="el-review-notice">
-            Personal design preview · Account services are not enabled.
-          </p>
-        )}
-        <div className="el-footer-top">
-          <h2>
-            Keep care
-            <br />
-            moving.
-          </h2>
-          <a href="/choose-account">Create your account</a>
-        </div>
-        <div className="el-footer-grid">
-          <div>
-            <img
-              className="el-footer-wordmark"
-              src="/brand/wordmark-white.svg"
-              width="150"
-              height="71"
-              alt="Ellis"
-            />
-            <p>
-              For the people
-              <br />
-              behind every patient.
-            </p>
-          </div>
-          <nav aria-label="Footer">
-            {links.map(([label, href]) => (
-              <a key={href} href={href}>
-                {label}
-              </a>
-            ))}
-          </nav>
-          <div>
-            <span className="el-kicker">Let’s talk</span>
-            <a href="mailto:hubanimalia@gmail.com">hubanimalia@gmail.com</a>
-            <p>
-              Questions about Ellis?
-              <br />
-              <a href="/contact">Get in touch.</a>
-            </p>
-          </div>
-        </div>
-        <div className="el-footer-bottom">
-          <span className="el-hub">
-            A product of{" "}
-            <img
-              src="/brand/hub-animalia.webp"
-              width="110"
-              height="37"
-              alt="Hub Animalia"
-            />
-          </span>
-          <span>Clarity. Accountability. Follow-through.</span>
-          <a href="#">Back to top</a>
-        </div>
-      </footer>
+      <PublicFooter />
     </div>
+  );
+}
+
+export function PublicHeader({ light = false, solid = false }) {
+  const menu = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 60);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+  return (
+    <header
+      className={
+        "el-header" +
+        (scrolled || solid ? " is-scrolled" : "") +
+        (light && !scrolled && !solid ? " is-light" : "")
+      }
+      onKeyDown={(e) => {
+        if (e.key === "Escape") {
+          setOpen(false);
+          menu.current?.focus();
+        }
+      }}
+    >
+      <a className="el-wordmark" href="/" aria-label="Ellis home">
+        <img
+          src={
+            light && !scrolled && !solid
+              ? "/brand/wordmark-forest.svg"
+              : "/brand/wordmark-white.svg"
+          }
+          width="108"
+          height="51"
+          alt="Ellis"
+        />
+      </a>
+      <button
+        ref={menu}
+        className="el-menu"
+        aria-controls="landing-navigation"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+      >
+        Menu {open ? "−" : "+"}
+      </button>
+      <nav
+        id="landing-navigation"
+        aria-label="Main"
+        className={open ? "is-open" : ""}
+      >
+        {links.map(([label, href]) => (
+          <a href={href} key={href}>
+            {label}
+          </a>
+        ))}
+      </nav>
+    </header>
+  );
+}
+export function PublicFooter() {
+  return (
+    <footer className="el-footer">
+      {import.meta.env.VITE_REVIEW_MODE === "true" && (
+        <p className="el-review-notice">
+          Personal design preview · Account services are not enabled.
+        </p>
+      )}
+      <div className="el-footer-top">
+        <h2>
+          Keep care
+          <br />
+          moving.
+        </h2>
+        <a href="/choose-account">Create your account</a>
+      </div>
+      <div className="el-footer-grid">
+        <div>
+          <img
+            className="el-footer-wordmark"
+            src="/brand/wordmark-white.svg"
+            width="150"
+            height="71"
+            alt="Ellis"
+          />
+          <p>
+            For the people
+            <br />
+            behind every patient.
+          </p>
+        </div>
+        <nav aria-label="Footer">
+          {links.map(([label, href]) => (
+            <a key={href} href={href}>
+              {label}
+            </a>
+          ))}
+        </nav>
+        <div>
+          <p>Let’s talk</p>
+          <a href="mailto:hubanimalia@gmail.com">hubanimalia@gmail.com</a>
+          <p>
+            Questions about Ellis?
+            <br />
+            <a href="/contact">Get in touch.</a>
+          </p>
+        </div>
+      </div>
+      <div className="el-footer-bottom">
+        <span className="el-hub">
+          A product of{" "}
+          <img
+            src="/brand/hub-animalia.webp"
+            width="110"
+            height="46"
+            alt="Hub Animalia"
+          />
+        </span>
+        <span>Clarity. Accountability. Follow-through.</span>
+        <a href="#">Back to top</a>
+      </div>
+    </footer>
   );
 }

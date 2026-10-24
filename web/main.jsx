@@ -1,12 +1,12 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { api } from "./api";
-import { contact, displayPhone } from "./contact";
 const Workspace = lazy(() =>
   import("./workspace").then((m) => ({ default: m.Workspace })),
 );
 import "./styles.css";
-import Landing from "./landing";
+import Landing, { PublicFooter, PublicHeader } from "./landing";
+import { AboutPage, HowPage, ContactPage } from "./public-pages";
 const path = window.location.pathname;
 export function Logo({ dark = false }) {
   return (
@@ -21,142 +21,22 @@ export function Logo({ dark = false }) {
   );
 }
 function Header() {
-  const [open, setOpen] = useState(false);
   return (
-    <header
-      className="public-header"
-      onKeyDown={(e) => {
-        if (e.key === "Escape") {
-          setOpen(false);
-          e.currentTarget.querySelector(".menu-toggle").focus();
-        }
-      }}
-    >
-      <Logo dark />
-      <button
-        className="menu-toggle"
-        aria-expanded={open}
-        aria-controls="navigation"
-        onClick={() => setOpen(!open)}
-      >
-        Menu {open ? "−" : "+"}
-      </button>
-      <nav
-        id="navigation"
-        className={open ? "expanded" : ""}
-        onKeyDown={(e) => {
-          if (e.key === "Escape") setOpen(false);
-        }}
-      >
-        <a href="/how-it-works">How it works</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
-        <a className="signin" href="/sign-in">
-          Sign in
-        </a>
-        <a className="button lime" href="/choose-account">
-          Create account <span>↗</span>
-        </a>
-      </nav>
-    </header>
+    <div className="ellis-landing public-header-space">
+      <PublicHeader solid />
+    </div>
   );
 }
 function Footer() {
   return (
-    <footer>
-      <div className="footer-top">
-        <Logo dark />
-        <p>Clarity. Accountability. Follow-through.</p>
-        <a href="mailto:hubanimalia@gmail.com">{contact.email} ↗</a>
-      </div>
-      <div className="footer-bottom">
-        <span className="hub-credit">
-          A product of{" "}
-          <img
-            src="/brand/hub-animalia.webp"
-            width="126"
-            height="42"
-            alt="Hub Animalia"
-          />
-        </span>
-        <div>
-          <a href="/about">About</a>
-          <a href="/contact">Contact</a>
-          <a href="/sign-in">Sign in</a>
-        </div>
-        <span>Keep care moving.</span>
-      </div>
-    </footer>
-  );
-}
-function CTA() {
-  return (
-    <section className="closing">
-      <span className="eyebrow">A clearer day starts here</span>
-      <h2>Good care keeps going.</h2>
-      <a className="button lime" href="/choose-account">
-        Create your account <span>↗</span>
-      </a>
-    </section>
-  );
-}
-const stages = [
-  [
-    "Arrival",
-    "A clear place to begin.",
-    "Register the patient, connect their owner and open a visit. Working alone? You can do it all.",
-  ],
-  [
-    "Consultation",
-    "Keep the next step in sight.",
-    "Record a coordination note alongside your primary clinical record. Make outstanding actions explicit.",
-  ],
-  [
-    "Outstanding work",
-    "Give every next step an owner.",
-    "Track the action, accountable person and due time. A handover is complete when the recipient accepts.",
-  ],
-  [
-    "Follow-up",
-    "The visit ends. Care continues.",
-    "Keep follow-up visible after a patient leaves. Record contact attempts and outcomes without assuming a message was delivered.",
-  ],
-];
-function Stages() {
-  return (
-    <section className="section" id="how-it-works">
-      <div className="section-title">
-        <h2>
-          From arrival.
-          <br />
-          Through follow-up.
-        </h2>
-        <span className="rule" />
-        <p>
-          One continuous view of the work.
-          <br />
-          However your practice is organised.
-        </p>
-      </div>
-      <div className="stages">
-        {stages.map(([label, title, copy], i) => (
-          <article key={label}>
-            <span className="stage-number">0{i + 1}</span>
-            <div>
-              <span className="eyebrow">{label}</span>
-              <h3>{title}</h3>
-              <p>{copy}</p>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
+    <div className="ellis-landing">
+      <PublicFooter />
+    </div>
   );
 }
 function Choices({ standalone = false }) {
   return (
     <section className={"section choices " + (standalone ? "standalone" : "")}>
-      <span className="eyebrow">Two account choices</span>
       <h2>
         Your practice.
         <br />
@@ -168,7 +48,6 @@ function Choices({ standalone = false }) {
       </p>
       <div className="choice-grid">
         <a href="/sign-up?kind=personal">
-          <span className="eyebrow">01 / Personal practice</span>
           <h3>
             For my
             <br />
@@ -178,12 +57,9 @@ function Choices({ standalone = false }) {
             An independent account for your patients, visits and follow-through.
             Start on your own.
           </p>
-          <span className="choice-action">
-            Choose personal practice <b>↗</b>
-          </span>
+          <span className="choice-action">Choose personal practice</span>
         </a>
         <a href="/sign-up?kind=clinic">
-          <span className="eyebrow">02 / Clinic or hospital</span>
           <h3>
             For my
             <br />
@@ -193,133 +69,13 @@ function Choices({ standalone = false }) {
             One clinic account with your own credentials. Add staff with
             individual permissions whenever you need them.
           </p>
-          <span className="choice-action">
-            Choose clinic <b>↗</b>
-          </span>
+          <span className="choice-action">Choose clinic</span>
         </a>
       </div>
       <p className="small">
         These are independent accounts. Records and credentials are never
         automatically linked.
       </p>
-    </section>
-  );
-}
-function About() {
-  return (
-    <>
-      <section className="section about-hero">
-        <span className="eyebrow">About Ellis</span>
-        <h1>
-          Built around
-          <br />
-          the people who care.
-        </h1>
-        <p>
-          Ellis is a veterinary practice management platform by Hub Animalia.
-          We’re building it to help veterinary teams know what needs doing, who
-          is responsible, and what has been completed, from arrival to
-          follow-up.
-        </p>
-      </section>
-      <section className="section introduction">
-        <span className="eyebrow">The company behind Ellis</span>
-        <div>
-          <h2>Meet Hub Animalia.</h2>
-          <img
-            className="about-hub"
-            src="/brand/hub-animalia.webp"
-            width="210"
-            height="70"
-            alt="Hub Animalia"
-          />
-          <p>
-            Hub Animalia began with a simple observation: people working in
-            animal care often have to piece together paper records, spreadsheets
-            and separate applications to get through the day. Information
-            becomes scattered, and staying connected takes more effort than it
-            should.
-          </p>
-          <p>
-            We’re building technology around those everyday realities. Our aim
-            is to help people in veterinary medicine work with greater clarity,
-            share knowledge and provide better care through tools shaped by the
-            people who use them.
-          </p>
-        </div>
-      </section>
-      <section className="section two-column">
-        <article>
-          <span className="eyebrow">Our vision</span>
-          <h3>Empowering every voice in veterinary care.</h3>
-          <p>
-            Empowering every voice in veterinary care through intelligent
-            technology, compassionate design, and unrelenting innovation.
-          </p>
-        </article>
-        <article>
-          <span className="eyebrow">Our mission</span>
-          <h3>A connected community of care.</h3>
-          <p>
-            To develop a suite of versatile, intelligent tools that transform
-            the veterinary experience from siloed workflows to an integrated,
-            global community of care.
-          </p>
-        </article>
-      </section>
-      <section className="quote section">
-        <blockquote>
-          “Technology shouldn’t just connect us — it should empower us to care
-          better.”
-        </blockquote>
-        <p>
-          Fred Adekunle
-          <br />
-          <span className="small">Founder, Hub Animalia</span>
-        </p>
-      </section>
-      <CTA />
-    </>
-  );
-}
-function Contact() {
-  return (
-    <section className="section contact">
-      <span className="eyebrow">Get in touch</span>
-      <h1>
-        Let’s keep
-        <br />
-        the conversation going.
-      </h1>
-      <p>
-        Have a question about Ellis or want to speak with the Hub Animalia team?
-        We’d like to hear from you.
-      </p>
-      <div className="contact-grid">
-        <div>
-          <h3>Email</h3>
-          <a href={"mailto:" + contact.email}>{contact.email} ↗</a>
-          <h3>Find us</h3>
-          <address>{contact.address}</address>
-        </div>
-        <div>
-          <h3>Phone / WhatsApp</h3>
-          {contact.phones.map((number) => (
-            <div className="phone" key={number}>
-              <span>{displayPhone(number)}</span>
-              <a aria-label={"Call " + number} href={"tel:" + number}>
-                Call ↗
-              </a>
-              <a
-                aria-label={"WhatsApp " + number}
-                href={"https://wa.me/" + number.slice(1)}
-              >
-                WhatsApp ↗
-              </a>
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }
@@ -370,7 +126,6 @@ function Auth() {
   return (
     <section className="auth-layout">
       <div className="auth-intro">
-        <span className="eyebrow">A clear place to begin</span>
         <h1>
           {activation
             ? "Your own credentials."
@@ -503,7 +258,6 @@ function Auth() {
                   ? "Create clinic and continue on my own"
                   : "Create personal practice"
                 : "Sign in"}{" "}
-          <span>↗</span>
         </button>
         <p className="small">
           {signup ? (
@@ -542,6 +296,9 @@ function App() {
       </>
     );
   if (path === "/") return <Landing />;
+  if (path === "/about") return <AboutPage />;
+  if (path === "/contact") return <ContactPage />;
+  if (path === "/how-it-works") return <HowPage />;
   if (path.startsWith("/app"))
     return (
       <Suspense
@@ -558,24 +315,6 @@ function App() {
   if (path === "/choose-account") page = <Choices standalone />;
   else if (["/sign-up", "sign-in", "/sign-in", "/activate"].includes(path))
     page = <Auth />;
-  else if (path === "/about") page = <About />;
-  else if (path === "/contact") page = <Contact />;
-  else if (path === "/how-it-works")
-    page = (
-      <>
-        <section className="section">
-          <span className="eyebrow">How Ellis works</span>
-          <h1>
-            One clear next step.
-            <br />
-            Then the next.
-          </h1>
-          <p>Outpatient coordination for your personal practice or clinic.</p>
-        </section>
-        <Stages />
-        <CTA />
-      </>
-    );
   else if (path === "/recovery")
     page = (
       <section className="section">
@@ -588,7 +327,7 @@ function App() {
           Owner recovery is not enabled for this pilot. A verified recovery
           channel is required before real patient data can be used.
         </p>
-        <a href="/contact">Contact Hub Animalia ↗</a>
+        <a href="/contact">Contact Hub Animalia</a>
       </section>
     );
   else

@@ -1038,3 +1038,15 @@
     transform: none;
   }
 }
+/* Preserve the patient in the portrait-format personal-practice photograph. */
+.el-programme:first-child .el-programme-photo {
+  aspect-ratio: 1;
+}
+.el-programme:first-child .el-programme-photo img {
+  object-position: center 62%;
+}
+.el-programme:first-child .el-programme-photo img {
+  height: 100%;
+  max-height: none;
+  aspect-ratio: 1;
+}

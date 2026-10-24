@@ -36,3 +36,5 @@ Navigation may compact on scroll, links may underline on hover/focus, and the mo
 ## Review before handoff
 
 Inspect the page at 360, 390, 768, 1024 and 1440 CSS pixels. Read the copy aloud. Check crop quality, face visibility, heading breaks, overflow, link destinations, keyboard menu controls, video pause and reduced-motion behaviour where tools permit. Run lint and build. Record what was actually tested and avoid claiming approval, pixel accuracy or accessibility certification without evidence.
+
+For subsequent design changes also read ai_anti_clich_web_design_guide.md and complete_ai_vibe_coding_design_critique.md. The current approved secondary-page visual reference is Growmodo (see docs/landing-redesign.md); the landing page retains Future London Academy.
