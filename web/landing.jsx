@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import { usePublicMotion } from "./public-motion";
+
 const links = [
   ["How to use", "/how-it-works"],
   ["About us", "/about"],
@@ -46,24 +48,7 @@ export default function Landing() {
     motion.addEventListener("change", apply);
     return () => motion.removeEventListener("change", apply);
   }, []);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries)
-          if (entry.isIntersecting) {
-            entry.target.classList.add("el-entered");
-            observer.unobserve(entry.target);
-          }
-      },
-      { threshold: 0.12 },
-    );
-    root.current
-      ?.querySelectorAll(".el-intro-copy, .el-explore, .el-story")
-      .forEach((el) => observer.observe(el));
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  usePublicMotion(root);
   const toggleVideo = () => {
     if (playing) video.current?.pause();
     else video.current?.play().catch(() => setMediaError(true));
@@ -125,9 +110,7 @@ export default function Landing() {
             />
             <div className="el-intro-copy">
               <h2 id="intro-title">
-                Keep track of the work
-                <br />
-                between consultations.
+                Keep track of the work between consultations.
               </h2>
               <div className="el-body-copy">
                 <p>
@@ -142,54 +125,10 @@ export default function Landing() {
                   For your own practice or a clinic team. From arrival to
                   follow-up.
                 </p>
-                <a className="el-inline" href="/how-it-works">
+                <a className="el-cta el-cta-secondary" href="/how-it-works">
                   Meet Ellis
                 </a>
               </div>
-            </div>
-          </div>
-          <div className="el-mosaic">
-            <div className="el-mosaic-column">
-              <img
-                className="el-window-photo"
-                src="/photography/window-clinician.webp"
-                width="1536"
-                height="1024"
-                alt="Clinician holding a coffee and checking her phone by a window"
-                loading="lazy"
-              />
-              <img
-                src="/photography/laboratory.webp"
-                width="1536"
-                height="1024"
-                alt="Clinician reviewing work at a laboratory microscope"
-                loading="lazy"
-              />
-              <div className="el-caption">
-                From a result to the next action.
-              </div>
-            </div>
-            <div className="el-mosaic-column el-mosaic-offset">
-              <img
-                src="/photography/clinicians.webp"
-                width="1536"
-                height="1024"
-                alt="Two clinicians reviewing a tablet together"
-                loading="lazy"
-              />
-              <div className="el-caption">
-                A shared view of what needs doing.
-              </div>
-              <a className="el-photo-link" href="/how-it-works">
-                <img
-                  src="/photography/coffee-clinician.webp"
-                  width="1529"
-                  height="1028"
-                  alt="Clinician holding a coffee and phone in a hallway"
-                  loading="lazy"
-                />
-                <span>See how Ellis works</span>
-              </a>
             </div>
           </div>
         </section>
@@ -216,17 +155,13 @@ export default function Landing() {
               <div className="el-programme-photo">
                 <img
                   src="/photography/personal.webp"
-                  width="1536"
-                  height="1024"
+                  width="1023"
+                  height="1537"
                   alt="Veterinarian examining a Sphynx cat"
                   loading="lazy"
                 />
               </div>
-              <h3>
-                For my
-                <br />
-                personal practice
-              </h3>
+              <h3>For my personal practice</h3>
               <p>
                 Manage your patient visits and follow-ups in your own practice
                 account.
@@ -245,11 +180,7 @@ export default function Landing() {
                   loading="lazy"
                 />
               </div>
-              <h3>
-                For my
-                <br />
-                clinic
-              </h3>
+              <h3>For my clinic</h3>
               <p>
                 Start on your own. Add staff when you need them, with their own
                 credentials and permissions.
@@ -258,35 +189,38 @@ export default function Landing() {
                 <span>Choose clinic</span>
               </div>
             </a>
-            <a className="el-programme" href="/how-it-works">
-              <div className="el-programme-photo">
-                <img
-                  src="/photography/phone-clinician.webp"
-                  width="1562"
-                  height="1007"
-                  alt="Clinician speaking on the phone at his desk"
-                  loading="lazy"
-                />
-              </div>
-              <h3>
-                From arrival
-                <br />
-                to follow-up
-              </h3>
-              <p>
-                See how patient visits, outstanding work and follow-ups fit
-                together.
-              </p>
-              <div className="el-programme-end">
-                <span>Explore the workflow</span>
-              </div>
-            </a>
           </div>
           <p className="el-account-note">
             Personal practice and clinic are separate accounts. Their
             credentials and records are never automatically linked.
           </p>
         </section>
+
+        <a className="el-workflow" href="/how-it-works">
+          <div className="el-programme-photo">
+            <img
+              src="/photography/phone-clinician.webp"
+              width="1562"
+              height="1007"
+              alt="Clinician speaking on the phone at his desk"
+              loading="lazy"
+            />
+          </div>
+          <div className="el-workflow-copy">
+            <h2>
+              From arrival
+              <br />
+              to follow-up
+            </h2>
+            <p>
+              See how patient visits, outstanding work and follow-ups fit
+              together.
+            </p>
+            <div className="el-programme-end">
+              <span>Explore the workflow</span>
+            </div>
+          </div>
+        </a>
 
         <section className="el-journey" aria-label="The care journey">
           {journey.map(([title, , copy]) => (
@@ -319,7 +253,7 @@ export default function Landing() {
               outstanding work attached to a patient, with a named person
               responsible for the next step.
             </p>
-            <a className="el-inline" href="/about">
+            <a className="el-cta el-cta-secondary" href="/about">
               Our story
             </a>
             <span className="el-story-credit">A product of Hub Animalia</span>
@@ -328,7 +262,7 @@ export default function Landing() {
             src="/photography/founder.webp"
             width="858"
             height="1080"
-            alt="Portrait of a man in white traditional attire"
+            alt="Fred Adekunle, founder of Hub Animalia"
             loading="lazy"
           />
         </section>
@@ -390,7 +324,14 @@ export function PublicHeader({ light = false, solid = false }) {
         className={open ? "is-open" : ""}
       >
         {links.map(([label, href]) => (
-          <a href={href} key={href}>
+          <a
+            href={href}
+            key={href}
+            className={href === "/choose-account" ? "el-cta" : undefined}
+            aria-current={
+              window.location.pathname === href ? "page" : undefined
+            }
+          >
             {label}
           </a>
         ))}
@@ -412,7 +353,9 @@ export function PublicFooter() {
           <br />
           moving.
         </h2>
-        <a href="/choose-account">Create your account</a>
+        <a className="el-cta" href="/choose-account">
+          Create your account
+        </a>
       </div>
       <div className="el-footer-grid">
         <div>

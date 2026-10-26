@@ -353,3 +353,4 @@ createRoot(document.getElementById("root")).render(<App />);
 import "./workspace.css";
 
 import "./landing.css";
+import "./public-pages.css";

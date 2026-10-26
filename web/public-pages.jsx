@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { PublicHeader, PublicFooter } from "./landing";
 import { contact, displayPhone } from "./contact";
-import "./public-pages.css";
+import { usePublicMotion } from "./public-motion";
 
 function Page({ title, image, children, intro }) {
+  const root = useRef(null);
+  usePublicMotion(root);
   useEffect(() => {
     document.title = `${title} | Ellis`;
   }, [title]);
   return (
-    <div className="ellis-landing editorial-page">
+    <div ref={root} className="ellis-landing editorial-page">
       <a className="skip" href="#page-main">
         Skip to content
       </a>
@@ -68,7 +70,7 @@ export function HowPage() {
               need them. Each person signs in separately; permissions determine
               what they can access, and job titles are optional.
             </p>
-            <a className="el-inline" href="/choose-account">
+            <a className="el-cta" href="/choose-account">
               Explore the account choices
             </a>
           </div>
@@ -114,7 +116,7 @@ export function HowPage() {
             Tell us where this guide needs more detail or where the workflow
             needs to fit your day better.
           </p>
-          <a className="el-inline" href="/contact">
+          <a className="el-cta el-cta-secondary" href="/contact">
             Talk to Hub Animalia
           </a>
         </div>
@@ -258,7 +260,7 @@ export function AboutPage() {
             {contact.email}
           </a>
           <p>
-            <a className="el-inline" href="/contact">
+            <a className="el-cta el-cta-secondary" href="/contact">
               All contact details
             </a>
           </p>
