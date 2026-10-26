@@ -64,7 +64,7 @@ export default function PrinciplesMarquee() {
       ref={section}
       className="el-marquee"
       tabIndex={0}
-      aria-label="Ellis: Clarity. Accountability. Follow-through. Focus here to pause the animation."
+      aria-label="Ellis: Clarity, Accountability, Follow-through; focus here to pause the animation."
     >
       <div ref={track} className="el-marquee-track" aria-hidden="true">
         {[0, 1].map((copy) => (
@@ -76,7 +76,7 @@ export default function PrinciplesMarquee() {
               alt=""
             />
             <span className="el-marquee-dot" />
-            {["Clarity.", "Accountability.", "Follow-through."].map((label) => (
+            {["Clarity", "Accountability", "Follow-through"].map((label) => (
               <span className="el-marquee-pill" key={label}>
                 {label}
               </span>
