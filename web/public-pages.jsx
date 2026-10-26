@@ -228,7 +228,7 @@ export function AboutPage() {
         <div>
           <h2>A message from our founder.</h2>
           <blockquote>
-            “Technology shouldn’t just connect us — it should empower us to care
+            “Technology shouldn’t just connect us. It should empower us to care
             better.”
           </blockquote>
           <p>

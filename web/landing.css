@@ -2,7 +2,7 @@
 .ellis-landing {
   --forest: #042617;
   --lime: #74d600;
-  --paper: #f7f8f4;
+  --paper: #ffffff;
   --ink: #17251d;
   --muted: #536257;
   --line: #d7ded6;
@@ -88,11 +88,11 @@
   border-radius: 2px;
   background: var(--lime);
   color: var(--forest);
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   line-height: 1.4;
   text-transform: none;
-  letter-spacing: 0;
+  letter-spacing: 0.035em;
   text-align: center;
   transition:
     background-color 180ms ease,
@@ -105,8 +105,7 @@
   color: inherit;
   border-color: currentColor;
 }
-.ellis-landing .el-cta:hover,
-.el-programme:hover .el-programme-end span {
+.ellis-landing .el-cta:hover {
   background: #87e619;
   border-color: #87e619;
   transform: translateY(-2px);
@@ -160,10 +159,10 @@
 }
 .el-wordmark {
   flex: none;
-  width: 104px;
+  width: 80px;
 }
 .el-wordmark img {
-  width: 104px;
+  width: 80px;
   height: auto;
 }
 .el-header nav {
@@ -172,7 +171,8 @@
   gap: 32px;
 }
 .el-header nav a {
-  font-size: 13px;
+  font-size: 16px;
+  letter-spacing: 0.04em;
   padding-block: 12px;
   line-height: 1.4;
   position: relative;
@@ -223,48 +223,29 @@
   font-size: clamp(40px, 6vw, 88px);
   line-height: 1.05;
 }
-.el-scroll,
-.el-playback {
-  position: absolute;
-  bottom: 24px;
-  min-height: 44px;
-  padding: 12px 16px;
-  font-size: 13px;
-  line-height: 1.4;
-  background: #042617e6;
-  color: white;
-  border: 1px solid #ffffff70;
-}
-.el-scroll {
-  left: var(--gutter);
-}
-.el-playback {
-  right: var(--gutter);
-}
-.el-scroll:hover,
-.el-playback:hover {
-  background: var(--forest);
-  border-color: var(--lime);
-}
 #landing-main {
   scroll-margin-top: 72px;
 }
 .el-intro {
-  padding: var(--section) var(--gutter);
-  max-width: 1440px;
-  margin: auto;
+  margin: 0;
+  padding: 0;
 }
 .el-intro-main {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
+  grid-template-columns: 2fr 3fr;
+  align-items: stretch;
 }
 .el-care-photo {
   width: 100%;
-  aspect-ratio: 4/5;
-  height: auto;
+  height: 100%;
+  max-height: 760px;
   object-position: 45% center;
+}
+.el-intro-copy {
+  padding: 64px var(--gutter);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .el-intro-copy h2 br {
   display: none;
@@ -321,17 +302,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  background: white;
-  border: 1px solid var(--line);
-  padding: 24px;
-  transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease;
-}
-.el-programme:hover,
-.el-programme:focus-visible {
-  border-color: #658c67;
-  box-shadow: 0 4px 16px #0426170a;
+  padding: 0;
 }
 .el-programme-photo {
   width: 100%;
@@ -571,12 +542,11 @@
   .el-header nav {
     gap: 24px;
   }
-  .el-intro-main,
   .el-workflow {
     gap: 32px;
   }
   .el-programme {
-    padding: 16px;
+    padding: 0;
   }
   .el-footer-grid {
     gap: 32px;
@@ -591,7 +561,7 @@
   }
   .el-wordmark,
   .el-wordmark img {
-    width: 88px;
+    width: 72px;
   }
   .el-menu {
     display: block;
@@ -641,9 +611,10 @@
   }
   .el-care-photo {
     aspect-ratio: 4/3;
+    height: auto;
   }
   .el-intro-copy {
-    max-width: 640px;
+    max-width: none;
   }
   .el-body-copy {
     max-width: none;
@@ -677,11 +648,6 @@
   .el-hero video {
     object-fit: contain;
   }
-  .el-scroll,
-  .el-playback {
-    bottom: 16px;
-    padding: 12px;
-  }
   .el-programmes,
   .el-workflow,
   .el-story {
@@ -691,7 +657,7 @@
     padding-bottom: 48px;
   }
   .el-programme {
-    padding: 16px;
+    padding: 0;
   }
   .el-programme h3 {
     min-height: 0;
@@ -741,4 +707,39 @@
   .el-workflow:hover .el-programme-end span {
     transform: none;
   }
+}
+
+.el-explore > h2 {
+  text-wrap: pretty;
+}
+.el-hero video {
+  animation: el-hero-arrive 700ms ease-out both;
+}
+@keyframes el-hero-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (max-width: 1000px) {
+  .el-header nav {
+    gap: 20px;
+  }
+}
+@media (max-width: 900px) and (min-width: 801px) {
+  .el-header {
+    padding-inline: 24px;
+  }
+  .el-header nav {
+    gap: 16px;
+  }
+  .el-header nav .el-cta {
+    padding-inline: 16px;
+  }
+}
+.ellis-landing button {
+  font-size: 17px;
+  letter-spacing: 0.035em;
 }

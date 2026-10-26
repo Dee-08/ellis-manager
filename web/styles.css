@@ -1,11 +1,11 @@
 :root {
   font-family: Arial, "Segoe UI", sans-serif;
   color: #042617;
-  background: #f7fbf5;
+  background: #ffffff;
   font-synthesis: none;
   --forest: #042617;
   --lime: #74d600;
-  --paper: #f7fbf5;
+  --paper: #ffffff;
   --line: #d4ded4;
   --muted: #536359;
 }
@@ -404,7 +404,7 @@ small {
 .closing {
   padding: 80px 32px;
   text-align: center;
-  background: #e8efdf;
+  background: #ffffff;
 }
 .closing h2 {
   margin-bottom: 32px;
@@ -451,7 +451,7 @@ footer {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 64px;
-  background: #e8efdf;
+  background: #ffffff;
 }
 .two-column p {
   margin-top: 24px;
@@ -819,4 +819,11 @@ textarea {
 .about-hub {
   margin-top: 24px;
   object-fit: contain;
+}
+
+/* Public account pages use the same readable button typography. */
+.button,
+button {
+  font-size: 17px;
+  letter-spacing: 0.035em;
 }

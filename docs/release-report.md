@@ -48,3 +48,13 @@ Evidence: ESLint and Vite review build passed. Browser checked four public route
 This remains a frontend preview. Public account services and patient data are disabled by the review build. Local backend work remains separate. Rollback: revert 97cb2a1 with a normal new commit and push; or restore the preceding verified Vercel deployment dpl_Fz5kdLHd4LnMnvmoMncvXaUDJ1QL. No database migration is involved. No rollback performed.
 
 Deployment verified READY: dpl_HSFEfMEQ2mGHyw7gDCbwRRhMx5Xn, https://ellis-manager-2k9ezy3gr-hubb6.vercel.app, canonical alias https://ellis-manager.vercel.app. Vite build duration 7.7 seconds; Vercel target production (canonical alias), product scope personal frontend preview. Browser verified live Contact artwork and both wordmarks/transparent logo, About hero, and sign-in review gate with zero forms. No browser console errors observed in this check. Platform runtime log scan/drains monitoring were not configured or claimed; this is a static frontend review.
+
+## 26 October public-site polish
+
+Code commit: 57235aa. Repository: https://github.com/Dee-08/ellis-manager. Deployment: https://ellis-manager.vercel.app (unique: https://ellis-manager-i8vtv443e-hubb6.vercel.app), dpl_2UpaeWvsWg6Gr3FNuWAcS6ee8oWd, verified READY on the existing Hubb project. Vercel canonical target is production; product scope remains the personal frontend preview.
+
+Changes: simplified intro, two equal account panels and a separate workflow feature; common 8px spacing/type system; stronger shared primary/secondary CTAs; once-only heading and quote entrance animation; restrained hover/focus/press feedback. Consolidated public CSS and corrected its import order. Existing named assets, video, founder quote and independent-account rules preserved.
+
+Tests: lint, standard build and review build passed; all four public routes checked at five widths with no horizontal overflow. Account panel/image/action geometry aligns on desktop/tablet; mobile flows naturally. Menu/Escape, disclosure, video pause/play and link targets checked. Actual motion-hook smoke check passed preference/entry/cleanup cases; OS-level reduced-motion visual emulation was not run. See docs/public-polish.md for detailed evidence and rollback. Backend unchanged; integration suite not repeated.
+
+Live verification: updated landing structure and stylesheet confirmed; About, How to use and Contact rendered; sign-in displayed Design review only with no enabled account workflow. Some network navigation/tool timeouts occurred and resolved on subsequent checks. This is not a hosted backend release. No new dependencies, services or costs.

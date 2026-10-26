@@ -162,9 +162,9 @@
   gap: 32px;
 }
 .ed-contact-grid article {
-  padding: 32px;
-  border: 1px solid var(--line);
-  background: white;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 .ed-contact h3 {
   font-size: 28px;
@@ -274,7 +274,7 @@
     height: 480px;
   }
   .ed-contact-grid article {
-    padding: 24px;
+    padding: 0;
   }
   .ed-phone-list > div {
     flex-wrap: wrap;
@@ -287,4 +287,9 @@
   .ed-phone-list a {
     flex: 1;
   }
+}
+
+.ed-phone-list a {
+  font-size: 17px;
+  letter-spacing: 0.035em;
 }

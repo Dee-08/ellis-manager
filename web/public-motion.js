@@ -6,7 +6,7 @@ export function usePublicMotion(root) {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const elements = [
       ...(root.current?.querySelectorAll(
-        "h1:not(.el-sr), h2, h3, blockquote",
+        "h1:not(.el-sr), h2, h3, blockquote, main p, main address, main .el-cta",
       ) || []),
     ];
     let observer;

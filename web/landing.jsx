@@ -35,24 +35,18 @@ const journey = [
 export default function Landing() {
   const video = useRef(null);
   const root = useRef(null);
-  const [playing, setPlaying] = useState(false);
   const [started, setStarted] = useState(false);
-  const [mediaError, setMediaError] = useState(false);
   useEffect(() => {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const apply = () => {
       if (motion.matches) video.current?.pause();
-      else video.current?.play().catch(() => setPlaying(false));
+      else video.current?.play().catch(() => setStarted(false));
     };
     apply();
     motion.addEventListener("change", apply);
     return () => motion.removeEventListener("change", apply);
   }, []);
   usePublicMotion(root);
-  const toggleVideo = () => {
-    if (playing) video.current?.pause();
-    else video.current?.play().catch(() => setMediaError(true));
-  };
   return (
     <div ref={root} className="ellis-landing">
       <a className="skip" href="#landing-main">
@@ -67,11 +61,9 @@ export default function Landing() {
           preload="metadata"
           poster="/photography/footer-background.webp"
           onPlay={() => {
-            setPlaying(true);
             setStarted(true);
           }}
-          onPause={() => setPlaying(false)}
-          onError={() => setMediaError(true)}
+          onError={() => setStarted(false)}
           aria-hidden="true"
           tabIndex={-1}
         >
@@ -81,21 +73,6 @@ export default function Landing() {
         <h1 className={started ? "el-sr" : "el-video-fallback"}>
           Keep care moving.
         </h1>
-        <a
-          className="el-scroll"
-          href="#landing-main"
-          aria-label="Explore Ellis"
-        >
-          Discover Ellis
-        </a>
-        <button
-          className="el-playback"
-          onClick={toggleVideo}
-          disabled={mediaError}
-          aria-label={playing ? "Pause hero video" : "Play hero video"}
-        >
-          {mediaError ? "Video unavailable" : playing ? "Pause Ⅱ" : "Play ▷"}
-        </button>
       </section>
 
       <main id="landing-main">
@@ -145,13 +122,9 @@ export default function Landing() {
         </figure>
 
         <section className="el-explore" aria-labelledby="explore-title">
-          <h2 id="explore-title">
-            Choose where
-            <br />
-            you’ll use Ellis.
-          </h2>
+          <h2 id="explore-title">Choose where you’ll use Ellis.</h2>
           <div className="el-programmes">
-            <a className="el-programme" href="/sign-up?kind=personal">
+            <article className="el-programme">
               <div className="el-programme-photo">
                 <img
                   src="/photography/personal.webp"
@@ -167,10 +140,12 @@ export default function Landing() {
                 account.
               </p>
               <div className="el-programme-end">
-                <span>Choose personal practice</span>
+                <a className="el-cta" href="/sign-up?kind=personal">
+                  Choose personal practice
+                </a>
               </div>
-            </a>
-            <a className="el-programme" href="/sign-up?kind=clinic">
+            </article>
+            <article className="el-programme">
               <div className="el-programme-photo">
                 <img
                   src="/photography/clinic.webp"
@@ -186,9 +161,11 @@ export default function Landing() {
                 credentials and permissions.
               </p>
               <div className="el-programme-end">
-                <span>Choose clinic</span>
+                <a className="el-cta" href="/sign-up?kind=clinic">
+                  Choose clinic
+                </a>
               </div>
-            </a>
+            </article>
           </div>
           <p className="el-account-note">
             Personal practice and clinic are separate accounts. Their
