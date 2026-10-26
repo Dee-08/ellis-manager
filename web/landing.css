@@ -266,25 +266,7 @@
 .el-body-copy .el-cta:hover {
   color: white;
 }
-.el-wide-photo {
-  position: relative;
-  background: var(--forest);
-}
-.el-wide-photo img {
-  width: 100%;
-  height: clamp(320px, 40vw, 600px);
-  object-position: center 32%;
-}
-.el-wide-photo figcaption {
-  position: absolute;
-  bottom: 24px;
-  left: var(--gutter);
-  padding: 16px 24px;
-  background: var(--paper);
-  color: var(--forest);
-  font-size: 16px;
-  max-width: calc(100% - 48px);
-}
+
 .el-explore {
   max-width: 1440px;
   margin: auto;
@@ -670,10 +652,7 @@
     gap: 32px;
     padding-top: 0;
   }
-  .el-wide-photo figcaption {
-    font-size: 14px;
-    padding: 16px;
-  }
+
   .el-story > img {
     height: 440px;
   }

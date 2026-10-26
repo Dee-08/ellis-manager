@@ -58,3 +58,9 @@ Changes: simplified intro, two equal account panels and a separate workflow feat
 Tests: lint, standard build and review build passed; all four public routes checked at five widths with no horizontal overflow. Account panel/image/action geometry aligns on desktop/tablet; mobile flows naturally. Menu/Escape, disclosure, video pause/play and link targets checked. Actual motion-hook smoke check passed preference/entry/cleanup cases; OS-level reduced-motion visual emulation was not run. See docs/public-polish.md for detailed evidence and rollback. Backend unchanged; integration suite not repeated.
 
 Live verification: updated landing structure and stylesheet confirmed; About, How to use and Contact rendered; sign-in displayed Design review only with no enabled account workflow. Some network navigation/tool timeouts occurred and resolved on subsequent checks. This is not a hosted backend release. No new dependencies, services or costs.
+
+## Screenshot correction release — 26 October
+
+Commit 5dc7128, https://github.com/Dee-08/ellis-manager. Corrections and checks are recorded in docs/public-polish.md. Public reading backgrounds are white, account/contact wrappers are removed, only account CTAs navigate, hero controls are removed, introductory image fills its section, founder punctuation updated, nav/buttons enlarged, wordmark reduced, section-copy entrances added. Hero/footer/founder colors remain. Lint/review build and six-width browser checks passed. Reduced-motion support retained; OS-level emulation not run. Optional external-app loader intentionally omitted.
+
+Existing Vercel project reused with no costs or service changes. Two GitHub DNS failures resolved before successful push. Frontend preview only; account services remain disabled. Rollback with a normal revert of 5dc7128 or restore preceding deployment dpl_2UpaeWvsWg6Gr3FNuWAcS6ee8oWd. Backend/schema unchanged.

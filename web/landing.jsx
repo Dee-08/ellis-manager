@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { usePublicMotion } from "./public-motion";
+import PrinciplesMarquee from "./principles-marquee";
 
 const links = [
   ["How to use", "/how-it-works"],
@@ -110,16 +111,7 @@ export default function Landing() {
           </div>
         </section>
 
-        <figure className="el-wide-photo">
-          <img
-            src="/photography/clarity.webp"
-            width="1536"
-            height="1024"
-            alt="Medical team reviewing documents together"
-            loading="lazy"
-          />
-          <figcaption>Clarity. Accountability. Follow-through.</figcaption>
-        </figure>
+        <PrinciplesMarquee />
 
         <section className="el-explore" aria-labelledby="explore-title">
           <h2 id="explore-title">Choose where you’ll use Ellis.</h2>
