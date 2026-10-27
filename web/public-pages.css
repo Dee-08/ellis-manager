@@ -54,17 +54,24 @@
 .ed-guide {
   max-width: 1440px;
   margin: auto;
-  padding: 0 var(--gutter);
+  padding: 64px var(--gutter) 0;
+  background: #ffffff;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 64px;
+  row-gap: 48px;
 }
 .ed-guide article {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   border-top: 1px solid var(--line);
-  padding: 48px 0;
+  padding: 32px 0 0;
 }
 .ed-guide h2 {
-  font-size: var(--small-heading);
+  font-size: clamp(28px, 2.5vw, 36px);
+  line-height: 1.2;
+  max-width: 520px;
 }
 .ed-guide .el-cta {
   margin-top: 32px;
@@ -222,9 +229,11 @@
 @media (max-width: 1000px) {
   .ed-introduction,
   .ed-next,
-  .ed-guide article,
   .ed-principles article {
     gap: 32px;
+  }
+  .ed-guide {
+    column-gap: 32px;
   }
   .ed-purpose article {
     padding: 32px;
@@ -244,7 +253,7 @@
   }
   .ed-introduction,
   .ed-next,
-  .ed-guide article,
+  .ed-guide,
   .ed-principles article,
   .ed-purpose,
   .ed-founder,
@@ -252,7 +261,10 @@
     grid-template-columns: 1fr;
   }
   .ed-guide article {
-    padding-block: 32px;
+    padding: 24px 0 0;
+  }
+  .ed-guide {
+    row-gap: 32px;
   }
   .ed-purpose article,
   .ed-purpose article:first-child,
@@ -363,9 +375,6 @@
 .ed-framework-row:nth-child(even) img {
   grid-column: 1;
   grid-row: 1;
-}
-.ed-framework + .ed-guide {
-  padding-top: 64px;
 }
 .ed-phone-list a {
   border-radius: 12px;

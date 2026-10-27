@@ -47,3 +47,9 @@ Direction and implementation: Sofia Pro headings and semibold CTAs with Proxima 
 Implementation plan: inspect assets; update the paired grid, marquee and link semantics; apply shared typography/buttons/motion; check desktop/mobile and action boundaries; build and publish to existing review deployment. React review: stable list keys, semantic articles/headings, image alternatives, lazy photographs, explicit intrinsic image dimensions, reduced-motion styles, no new fetching or state effects.
 
 Verification: frontend ESLint and review build passed. Browser checks on Landing, How, About and Contact at 360, 768, 1024 and 1440px found no horizontal document overflow; shared CTAs computed to 12px radius. At 390px, the framework stacks in readable text/image pairs, all four photos load, ticker is about 71px high with zero text borders. Clicking the workflow photograph stays on Landing; the sole workflow CTA navigates to /how-it-works. Desktop/mobile grid screenshots inspected. Computed heading/body fonts are Sofia Pro/Proxima Nova; visually loaded in preview. Reduced-motion fallback retained and reviewed, not OS-emulated. Backend unchanged.
+
+## 27 October: white workflow text grid
+
+Screenshot 152342 identifies the four detailed workflow rows. Replaced the split heading/body rows with a two-column, two-row grid: heading above copy in each cell, fine top rules, white background, no pictures or decorative numbering. The feedback invitation remains below. Single-column layout at 700px and below. Existing content and CTA retained.
+
+Verified review build, desktop/mobile screenshots, and computed one/two-column layouts at 360, 390, 768, 1024 and 1440px. All measured backgrounds are pure white and no horizontal overflow was detected. CSS-only change; backend untouched.
