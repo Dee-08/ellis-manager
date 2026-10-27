@@ -39,22 +39,58 @@ export function HowPage() {
       image="how-hero"
       intro="Keep the next action connected to the patient, from the first visit to the follow-up call."
     >
-      <section className="ed-introduction">
-        <h2>
-          A place for the work
-          <br />
-          still to do.
-        </h2>
-        <div>
-          <p>
-            Ellis is being built as a coordination companion to your clinical
-            record. It brings visits, outstanding work and follow-ups into one
-            view.
-          </p>
-          <p className="ed-note">
-            This is an early guide. We’ll update the walkthrough as the
-            dashboard and workflows take shape.
-          </p>
+      <section className="ed-framework" aria-labelledby="framework-title">
+        <header className="ed-framework-heading">
+          <h2 id="framework-title">A clear framework around care.</h2>
+          <div>
+            <p>
+              Ellis is being built as a coordination companion to your clinical
+              record. It brings visits, outstanding work and follow-ups into one
+              view.
+            </p>
+            <p className="ed-note">
+              This is an early guide. We’ll update the walkthrough as the
+              dashboard and workflows take shape.
+            </p>
+          </div>
+        </header>
+        <div className="ed-framework-grid">
+          {[
+            [
+              "Clarity",
+              "Bring patient records and outstanding work into view.",
+              "Clinicians reviewing notes and a tablet together",
+            ],
+            [
+              "Accountability",
+              "Make ownership clear when work moves between roles.",
+              "Two clinicians discussing information on a tablet",
+            ],
+            [
+              "Follow-through",
+              "Track progress and make unfinished steps visible.",
+              "Clinician reviewing work on a tablet",
+            ],
+            [
+              "Keep care moving",
+              "A calm, dependable system for veterinary teams.",
+              "Veterinarian examining a golden retriever",
+            ],
+          ].map(([title, description, alt], index) => (
+            <article className="ed-framework-row" key={title}>
+              <div className="ed-framework-copy">
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </div>
+              <img
+                src={`/photography/grid-${index + 1}.webp`}
+                alt={alt}
+                width="1200"
+                height="800"
+                loading="lazy"
+              />
+            </article>
+          ))}
         </div>
       </section>
       <section className="ed-guide" aria-label="Getting started">

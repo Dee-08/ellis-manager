@@ -293,3 +293,126 @@
   font-size: 17px;
   letter-spacing: 0.035em;
 }
+
+/* Alternating editorial framework: supplied GRID 1-4 photographs. */
+.ed-framework {
+  background: #042617;
+  color: #f4f1ea;
+  padding: var(--section) var(--gutter);
+}
+.ed-framework-heading,
+.ed-framework-grid {
+  max-width: 1312px;
+  margin-inline: auto;
+}
+.ed-framework-heading {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-bottom: 64px;
+}
+.ed-framework-heading h2 {
+  font-weight: 600;
+  max-width: 560px;
+}
+.ed-framework-heading p {
+  color: #f4f1ea;
+}
+.ed-framework-heading .ed-note {
+  border-color: #74d600;
+}
+.ed-framework-grid {
+  display: grid;
+  gap: 8px;
+}
+.ed-framework-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.ed-framework-copy {
+  background: #f4f1ea;
+  color: #042617;
+  padding: clamp(32px, 4vw, 64px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  border-top-left-radius: 80px;
+}
+.ed-framework-copy h3 {
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 600;
+}
+.ed-framework-copy p {
+  color: #274537;
+  max-width: 400px;
+}
+.ed-framework-row img {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  aspect-ratio: 1.8;
+  object-fit: cover;
+}
+.ed-framework-row:nth-child(even) .ed-framework-copy {
+  grid-column: 2;
+  grid-row: 1;
+  border-radius: 0 0 80px 0;
+}
+.ed-framework-row:nth-child(even) img {
+  grid-column: 1;
+  grid-row: 1;
+}
+.ed-framework + .ed-guide {
+  padding-top: 64px;
+}
+.ed-phone-list a {
+  border-radius: 12px;
+  transition:
+    background-color 240ms ease-in-out,
+    color 240ms ease-in-out,
+    border-color 240ms ease-in-out,
+    transform 240ms ease-in-out;
+}
+.ed-phone-list a:hover {
+  transform: translateY(-2px);
+}
+.ed-phone-list a:active {
+  transform: translateY(0);
+}
+@media (max-width: 700px) {
+  .ed-framework-heading,
+  .ed-framework-row {
+    grid-template-columns: 1fr;
+  }
+  .ed-framework-heading {
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .ed-framework-grid {
+    gap: 32px;
+  }
+  .ed-framework-copy {
+    min-height: 220px;
+    border-top-left-radius: 48px;
+  }
+  .ed-framework-row:nth-child(even) .ed-framework-copy {
+    grid-column: auto;
+    grid-row: auto;
+    border-radius: 0 48px 0 0;
+  }
+  .ed-framework-row:nth-child(even) img {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .ed-framework-row img {
+    min-height: 0;
+    aspect-ratio: 1.5;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ed-phone-list a:hover {
+    transform: none;
+  }
+}

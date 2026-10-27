@@ -77,7 +77,7 @@ export default function PrinciplesMarquee() {
             />
             <span className="el-marquee-dot" />
             {["Clarity", "Accountability", "Follow-through"].map((label) => (
-              <span className="el-marquee-pill" key={label}>
+              <span className="el-marquee-label" key={label}>
                 {label}
               </span>
             ))}

@@ -827,3 +827,19 @@ button {
   font-size: 17px;
   letter-spacing: 0.035em;
 }
+
+.button,
+button {
+  border-radius: 12px;
+  transition:
+    background-color 240ms ease-in-out,
+    color 240ms ease-in-out,
+    box-shadow 240ms ease-in-out,
+    transform 240ms ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  button {
+    transition: none;
+  }
+}

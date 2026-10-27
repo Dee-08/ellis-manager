@@ -165,7 +165,7 @@ export default function Landing() {
           </p>
         </section>
 
-        <a className="el-workflow" href="/how-it-works">
+        <section className="el-workflow" aria-label="From arrival to follow-up">
           <div className="el-programme-photo">
             <img
               src="/photography/phone-clinician.webp"
@@ -186,10 +186,12 @@ export default function Landing() {
               together.
             </p>
             <div className="el-programme-end">
-              <span>Explore the workflow</span>
+              <a className="el-cta el-cta-secondary" href="/how-it-works">
+                Explore the workflow
+              </a>
             </div>
           </div>
-        </a>
+        </section>
 
         <section className="el-journey" aria-label="The care journey">
           {journey.map(([title, , copy]) => (

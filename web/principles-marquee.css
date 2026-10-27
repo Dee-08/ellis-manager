@@ -1,7 +1,7 @@
 .el-marquee {
   background: #042617;
   color: #f7f9f8;
-  padding: 3rem 0;
+  padding: 20px 0;
   overflow: hidden;
 }
 .el-marquee:focus-visible {
@@ -24,7 +24,7 @@
   flex-shrink: 0;
 }
 .el-marquee-group img {
-  width: clamp(136px, 16vw, 224px);
+  width: clamp(96px, 10vw, 136px);
   height: auto;
   flex-shrink: 0;
 }
@@ -35,11 +35,8 @@
   border-radius: 50%;
   flex-shrink: 0;
 }
-.el-marquee-pill {
-  border: 1px solid #74d600;
-  border-radius: 100px;
-  padding: 16px 32px;
-  font-size: clamp(24px, 2.5vw, 40px);
+.el-marquee-label {
+  font-size: clamp(20px, 2vw, 28px);
   line-height: 1.15;
   letter-spacing: -0.025em;
   white-space: nowrap;

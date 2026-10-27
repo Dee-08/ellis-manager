@@ -64,3 +64,11 @@ Live verification: updated landing structure and stylesheet confirmed; About, Ho
 Commit 5dc7128, https://github.com/Dee-08/ellis-manager. Corrections and checks are recorded in docs/public-polish.md. Public reading backgrounds are white, account/contact wrappers are removed, only account CTAs navigate, hero controls are removed, introductory image fills its section, founder punctuation updated, nav/buttons enlarged, wordmark reduced, section-copy entrances added. Hero/footer/founder colors remain. Lint/review build and six-width browser checks passed. Reduced-motion support retained; OS-level emulation not run. Optional external-app loader intentionally omitted.
 
 Existing Vercel project reused with no costs or service changes. Two GitHub DNS failures resolved before successful push. Frontend preview only; account services remain disabled. Rollback with a normal revert of 5dc7128 or restore preceding deployment dpl_2UpaeWvsWg6Gr3FNuWAcS6ee8oWd. Backend/schema unchanged.
+
+## Principles marquee release — 26 October 2026
+
+Commit: 12d6ff9d8fc7636c7d0e9bfc4f45644f9fecbf21. Repository: https://github.com/Dee-08/ellis-manager. Canonical frontend preview: https://ellis-manager.vercel.app/. Vercel deployment dpl_FqXdKwe96aymghMsYZwpvRavoGhJ reported READY and the canonical page visibly contains the new marquee.
+
+Replaced the clarity photograph with the actual Ellis logo, lime divider and three outlined pills. Duplicated groups loop continuously; hover/focus decelerates and leaving resumes. Includes static reduced-motion CSS. Frontend lint and review build pass; browser checks at 1280px and 390px confirmed no horizontal overflow and equal-width loop halves. Pause/resume and live appearance verified. Reduced-motion preference was reviewed in code, not emulated. No backend changes or paid dependencies. Existing review-only account restrictions remain.
+
+Rollback: revert commit 12d6ff9 and push master, or promote the prior READY deployment dpl_A8FASudyHNZDVfhRU3hzBRkNfAqL. No database migration is involved.
