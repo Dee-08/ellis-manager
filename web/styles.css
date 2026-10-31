@@ -843,3 +843,14 @@ button {
     transition: none;
   }
 }
+
+/* Visible forest focus for all form controls. */
+input:focus,
+select:focus,
+textarea:focus,
+.identity-page input:focus {
+  border-color: #042617;
+  outline: 2px solid #042617;
+  outline-offset: 2px;
+  box-shadow: none;
+}

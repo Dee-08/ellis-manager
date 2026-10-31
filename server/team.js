@@ -233,8 +233,8 @@ team.post("/team/:id/disable", async (req, res) => {
         [req.actor.account_id, p.id],
       );
       const tasks = await c.query(
-        "UPDATE tasks SET owner_id=$1,reason='Escalated after staff access revocation',version=version+1 WHERE account_id=$2 AND owner_id=$3 AND status NOT IN ('completed','cancelled') RETURNING id",
-        [owner.id, req.actor.account_id, p.id],
+        "UPDATE tasks SET owner_id=NULL,reason='Returned to shared work after staff access revocation',version=version+1 WHERE account_id=$1 AND owner_id=$2 AND status NOT IN ('completed','cancelled') RETURNING id",
+        [req.actor.account_id, p.id],
       );
       await c.query(
         "UPDATE handovers SET state='cancelled',decided_at=now() WHERE account_id=$1 AND (from_id=$2 OR to_id=$2) AND state='pending'",
@@ -243,7 +243,8 @@ team.post("/team/:id/disable", async (req, res) => {
       for (const t of tasks.rows)
         await audit(c, req.actor, "task.escalated", "task", t.id, {
           from: p.id,
-          to: owner.id,
+          to: null,
+          supervisor: owner.id,
         });
       await audit(c, req.actor, "staff.disabled", "principal", p.id, {
         reason: b.reason,
@@ -284,7 +285,9 @@ team.post("/ownership/transfer", async (req, res) => {
         "UPDATE principals SET is_owner=true,auth_version=auth_version+1 WHERE account_id=$1 AND id=$2",
         [req.actor.account_id, p.id],
       );
-      for (const cap of capabilities.filter((x) => !x.startsWith("notes.")))
+      for (const cap of capabilities.filter(
+        (x) => !x.startsWith("notes.") && x !== "visits.manage",
+      ))
         await c.query(
           "INSERT INTO capability_grants VALUES($1,$2,$3) ON CONFLICT DO NOTHING",
           [req.actor.account_id, p.id, cap],

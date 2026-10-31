@@ -5,11 +5,15 @@ import connectPg from "connect-pg-simple";
 import { resolve } from "node:path";
 import { pool } from "./db.js";
 import { Problem } from "./domain.js";
-import { auth, authenticated } from "./auth.js";
+import { createAuth, authenticated } from "./auth.js";
+import { createTenancy } from "./tenancy.js";
 import { records } from "./records.js";
 import { work } from "./work.js";
+import { today } from "./today.js";
+import { schedule } from "./schedule.js";
 import { team } from "./team.js";
-export function createApp() {
+import { demo } from "./demo.js";
+export function createApp(options = {}) {
   const app = express();
   app.disable("x-powered-by");
   const production = process.env.NODE_ENV === "production";
@@ -61,12 +65,14 @@ export function createApp() {
   );
   app.get("/api/health", async (req, res) => {
     await pool.query("SELECT 1");
-    res.json({ status: "ok", scope: "coordination-companion" });
+    res.json({ status: "ok", scope: "development-workflows" });
   });
-  app.use("/api/auth", auth);
+  app.use("/api/auth", createAuth(options));
+  app.use("/api", demo);
+  app.use("/api", createTenancy(options));
   app.use("/api", authenticated);
   app.get("/api/me", (req, res) => res.json(req.actor));
-  app.use("/api", records, work, team);
+  app.use("/api", records, work, team, today, schedule);
   app.use("/api", (req, res, next) =>
     next(new Problem(404, "Record or endpoint not found.")),
   );
@@ -75,35 +81,28 @@ export function createApp() {
   app.use((e, req, res, next) => {
     if (res.headersSent) return next(e);
     if (e.name === "ZodError")
-      return res
-        .status(400)
-        .json({
-          error: e.issues
-            .map((x) => x.path.join(".") + ": " + x.message)
-            .join("; "),
-        });
+      return res.status(400).json({
+        error: e.issues
+          .map((x) => x.path.join(".") + ": " + x.message)
+          .join("; "),
+      });
     if (e.code === "23505")
-      return res
-        .status(409)
-        .json({
-          error:
-            "This entry already exists. Review the existing record before retrying.",
-        });
+      return res.status(409).json({
+        error:
+          "This entry already exists. Review the existing record before retrying.",
+      });
     if (["23503", "22P02", "23514"].includes(e.code))
-      return res
-        .status(400)
-        .json({
-          error: "A linked record or value is unavailable. Review your input.",
-        });
+      return res.status(400).json({
+        error: "A linked record or value is unavailable. Review your input.",
+      });
     if (e.type === "entity.parse.failed")
       return res.status(400).json({ error: "Invalid JSON." });
-    res
-      .status(e.status || 500)
-      .json({
-        error: e.status
-          ? e.message
-          : "The request could not be completed. Your changes were not saved. Please retry.",
-      });
+    res.status(e.status || 500).json({
+      code: e.status ? e.code : "server_error",
+      error: e.status
+        ? e.message
+          : "The request could not be confirmed. Check the latest record before submitting again.",
+    });
   });
   return app;
 }

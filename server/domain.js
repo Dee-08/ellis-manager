@@ -1,10 +1,13 @@
 export class Problem extends Error {
-  constructor(status, message) {
+  constructor(status, message, code = "request_failed") {
     super(message);
     this.status = status;
+    this.code = code;
   }
 }
 export const capabilities = [
+  "appointment.view",
+  "appointment.manage",
   "patients.view",
   "patients.edit",
   "notes.view",

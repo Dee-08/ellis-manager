@@ -156,7 +156,7 @@ records.get("/patients/:id", async (req, res) => {
   const client = await owned(pool, "clients", req.actor, p.client_id);
   const visits = (
     await pool.query(
-      "SELECT v.*,p.name AS responsible_name FROM visits v JOIN principals p ON p.account_id=v.account_id AND p.id=v.responsible_id WHERE v.account_id=$1 AND patient_id=$2 ORDER BY arrived_at DESC LIMIT 100",
+      "SELECT v.*,p.name AS responsible_name FROM visits v LEFT JOIN principals p ON p.account_id=v.account_id AND p.id=v.responsible_id WHERE v.account_id=$1 AND patient_id=$2 ORDER BY arrived_at DESC LIMIT 100",
       [req.actor.account_id, p.id],
     )
   ).rows;
@@ -178,7 +178,7 @@ records.post("/visits", async (req, res) => {
       await owned(c, "patients", req.actor, b.patientId);
       const r = (
         await c.query(
-          "INSERT INTO visits(account_id,patient_id,responsible_id) VALUES($1,$2,$3) RETURNING *",
+          "INSERT INTO visits(account_id,patient_id,created_by) VALUES($1,$2,$3) RETURNING *",
           [req.actor.account_id, b.patientId, req.actor.id],
         )
       ).rows[0];

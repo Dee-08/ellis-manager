@@ -13,6 +13,16 @@ export async function tx(fn) {
     await c.query("BEGIN");
     const actor = requestContext.getStore();
     if (actor) {
+      if (actor.identity_id) {
+        const identity = (
+          await c.query(
+            "SELECT auth_version FROM identities WHERE id=$1 FOR SHARE",
+            [actor.identity_id],
+          )
+        ).rows[0];
+        if (!identity || identity.auth_version !== actor.identity_version)
+          throw new Problem(401, "Your session has expired.");
+      }
       await c.query("SELECT id FROM accounts WHERE id=$1 FOR UPDATE", [
         actor.account_id,
       ]);

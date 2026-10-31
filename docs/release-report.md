@@ -72,3 +72,37 @@ Commit: 12d6ff9d8fc7636c7d0e9bfc4f45644f9fecbf21. Repository: https://github.com
 Replaced the clarity photograph with the actual Ellis logo, lime divider and three outlined pills. Duplicated groups loop continuously; hover/focus decelerates and leaving resumes. Includes static reduced-motion CSS. Frontend lint and review build pass; browser checks at 1280px and 390px confirmed no horizontal overflow and equal-width loop halves. Pause/resume and live appearance verified. Reduced-motion preference was reviewed in code, not emulated. No backend changes or paid dependencies. Existing review-only account restrictions remain.
 
 Rollback: revert commit 12d6ff9 and push master, or promote the prior READY deployment dpl_A8FASudyHNZDVfhRU3hzBRkNfAqL. No database migration is involved.
+
+## 27 October: editorial framework release
+
+Commit d85acfc26883e4302f17f2d9650141ff3779c97a, repository https://github.com/Dee-08/ellis-manager. Existing Hubb review deployment dpl_GPPUQu5d5a5wk7dMtN1yU65J6RSE reported READY. Verified live https://ellis-manager.vercel.app/how-it-works contains four alternating pairs, all four GRID WebP images load and the supplied typography renders. No browser console errors observed during the check.
+
+Changes: thinner borderless ticker, Sofia Pro headings/CTAs and Proxima Nova body, rounded CTA corners with eased feedback, smoother text entrance, workflow section with only one linked button, forest/cream framework grid. Checks and width matrix documented in public-polish.md. No backend changes; remains frontend review mode. Reduced-motion CSS reviewed but OS preference not emulated. No new dependencies or services. Rollback: revert d85acfc and push, or promote prior READY deployment dpl_bZfMif1h1tsbSEGgSy4Ki6BV3zZj; no database migration required.
+
+## Local backend continuation — 30 October 2026
+
+This is an uncommitted local increment. No push or deployment was made. Additive migrations 001–004 are applied to `ellis_manager_db`, which was inspected read-only first and had no pre-existing tables or records. Tests use a separate disposable PostgreSQL cluster and refuse the user's database.
+
+Added verified identity/setup and personal/clinic workspaces, invitation/conversion APIs, persistent patient/visit/unsigned coordination-note/task flows, and appointment creation, changes, check-in and practice-timezone week filtering. Disposable browser review covered synthetic sign-in, workspace selection, Today and Schedule. It did not verify real email, Google, the complete signup journey, all onboarding flows or production tenancy.
+
+Evidence: `node scripts/test-identity.js` — 25 passed, 0 failed; `node node_modules/eslint/bin/eslint.js web server db tests scripts` — passed; `node node_modules/vite/bin/vite.js build` — passed; `git diff --check` — passed. A timezone-boundary case confirms the schedule week follows Africa/Lagos local midnight.
+
+Release blockers: Gmail SMTP connection timed out (`ETIMEDOUT`), so no email was sent and the local development mailbox remains enabled. Google OAuth configuration is unavailable. Production database/host, privacy and recovery policies, backups and deployment gates remain separate. Prescriptions/treatments, diagnostics, inpatient/discharge, finance, inventory, notifications and reporting remain unimplemented.
+
+Instruction conflict resolved by the user's 30 October choice of “Master spec”: proceed with central identities and multi-workspace membership. See `docs/ellis-progress.md`. This is not a completed veterinary system or hosted release.
+
+## Local authentication and demo-request update — 31 October 2026
+
+Status: uncommitted local increment, not published. Repository remains https://github.com/Dee-08/ellis-manager; https://ellis-manager.vercel.app remains the earlier static frontend preview. No new deployment or release commit is claimed.
+
+Working locally: persistent demo-request form at `/book-demo`; one Create Account header action and primary Book a Demo CTA; forest input-focus borders; verification/session recovery links and workspace-load retries. Verified users enter Today after login. Signup still correctly requires verification and practice setup.
+
+Migration `005_demo_requests.sql` was reviewed and applied additively to `ellis_manager_db`. Demo submissions are validated, rate limited and idempotent. No main-database synthetic records or destructive migrations were used.
+
+Evidence: `pnpm test` passed all 27 tests using isolated PostgreSQL; `pnpm run lint`, `pnpm run build`, and `git diff --check` passed. Disposable browser review verified demo submission/receipt, sign-in to Today and retained session after refresh. Desktop demo layout/focus was inspected; mobile demo visual signoff is incomplete. Real inbox verification and production workflows were not tested.
+
+The local API now uses SMTP, not the local mailbox. `node --env-file=.env scripts/verify-mail.js` verified TLS and authentication without sending a message. This supersedes the earlier timeout result but is not proof of inbox delivery or production readiness. Google OAuth remains unconfigured. No transactional email account/domain or hosted PostgreSQL is available; local PostgreSQL must not be exposed to Vercel.
+
+Publishing: Vercel project access is restored. GitHub write access still fails with HTTP 403 Resource not accessible by integration on a branch-creation retry. No new repository, hosting resource, paid service, push or deployment was created.
+
+Rollback: retain migration 005 and submitted records. Revert only this increment's application changes after reviewing compatibility; never drop the requests table as an automatic rollback. Public deployment needs no rollback because it was not changed. Full master-spec workflows remain incomplete; see `ellis-progress.md` for the continuation checklist.

@@ -4,6 +4,27 @@ import { Problem, requireCap, version, taskTransition } from "./domain.js";
 import { z, parse, text, optional, uuid, ver, page } from "./validation.js";
 import { owned } from "./records.js";
 export const work = Router();
+work.post("/tasks/:id/claim", async (req, res) => {
+  requireCap(req.actor, "tasks.complete");
+  const b = parse(z.object({ version: ver }), req.body);
+  res.json(
+    await tx(async (c) => {
+      const t = await owned(c, "tasks", req.actor, req.params.id, true);
+      taskAccess(req.actor, t);
+      version(t, b.version);
+      if (t.owner_id || ["completed", "cancelled"].includes(t.status))
+        throw new Problem(409, "This task is no longer available to claim.");
+      const result = (
+        await c.query(
+          "UPDATE tasks SET owner_id=$1,version=version+1 WHERE account_id=$2 AND id=$3 RETURNING *",
+          [req.actor.id, req.actor.account_id, t.id],
+        )
+      ).rows[0];
+      await audit(c, req.actor, "task.claimed", "task", t.id);
+      return result;
+    }),
+  );
+});
 work.patch("/tasks/:id", async (req, res) => {
   requireCap(req.actor, "tasks.create");
   const b = parse(
@@ -18,7 +39,8 @@ work.patch("/tasks/:id", async (req, res) => {
     await tx(async (c) => {
       const t = await owned(c, "tasks", req.actor, req.params.id, true);
       taskAccess(req.actor, t);
-      if (t.owner_id !== req.actor.id) requireCap(req.actor, "tasks.reassign");
+      if (t.owner_id && t.owner_id !== req.actor.id)
+        requireCap(req.actor, "tasks.reassign");
       version(t, b.version);
       if (["completed", "cancelled"].includes(t.status))
         throw new Problem(
@@ -37,7 +59,11 @@ work.patch("/tasks/:id", async (req, res) => {
   );
 });
 function taskAccess(actor, t) {
-  if (t.owner_id !== actor.id && !actor.capabilities.includes("tasks.team"))
+  if (
+    t.owner_id &&
+    t.owner_id !== actor.id &&
+    !actor.capabilities.includes("tasks.team")
+  )
     throw new Problem(404, "Record not found.");
 }
 work.get("/tasks", async (req, res) => {
@@ -52,7 +78,7 @@ work.get("/tasks", async (req, res) => {
   res.json(
     (
       await pool.query(
-        "SELECT t.*,p.name AS owner_name,CASE WHEN $4 THEN a.name ELSE NULL END AS patient_name, (t.due_at<now() AND t.status NOT IN ('completed','cancelled')) AS overdue FROM tasks t JOIN principals p ON p.account_id=t.account_id AND p.id=t.owner_id LEFT JOIN patients a ON a.account_id=t.account_id AND a.id=t.patient_id WHERE t.account_id=$1 AND ($2 OR t.owner_id=$3) AND ($6='all' OR t.kind=$6) AND ($7='all' OR ($7='mine' AND t.owner_id=$3) OR ($7='open' AND t.status NOT IN ('completed','cancelled')) OR ($7='today' AND t.status NOT IN ('completed','cancelled') AND (t.due_at AT TIME ZONE $8)::date=(now() AT TIME ZONE $8)::date)) ORDER BY CASE WHEN t.status IN ('completed','cancelled') THEN 1 ELSE 0 END,t.due_at NULLS LAST,t.created_at DESC,t.id LIMIT 50 OFFSET $5",
+        "SELECT t.*,p.name AS owner_name,CASE WHEN $4 THEN a.name ELSE NULL END AS patient_name, (t.due_at<now() AND t.status NOT IN ('completed','cancelled')) AS overdue FROM tasks t LEFT JOIN principals p ON p.account_id=t.account_id AND p.id=t.owner_id LEFT JOIN patients a ON a.account_id=t.account_id AND a.id=t.patient_id WHERE t.account_id=$1 AND ($2 OR t.owner_id=$3 OR t.owner_id IS NULL) AND ($6='all' OR t.kind=$6) AND ($7='all' OR ($7='mine' AND t.owner_id=$3) OR ($7='open' AND t.status NOT IN ('completed','cancelled')) OR ($7='today' AND t.status NOT IN ('completed','cancelled') AND (t.due_at AT TIME ZONE $8)::date=(now() AT TIME ZONE $8)::date)) ORDER BY CASE WHEN t.status IN ('completed','cancelled') THEN 1 ELSE 0 END,t.due_at NULLS LAST,t.created_at DESC,t.id LIMIT 50 OFFSET $5",
         [
           req.actor.account_id,
           team,
@@ -92,7 +118,7 @@ work.post("/tasks", async (req, res) => {
       }
       const t = (
         await c.query(
-          "INSERT INTO tasks(account_id,patient_id,visit_id,owner_id,kind,action,due_at) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *",
+          "INSERT INTO tasks(account_id,patient_id,visit_id,created_by,kind,action,due_at) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *",
           [
             req.actor.account_id,
             b.patientId || null,
@@ -140,7 +166,8 @@ work.post("/tasks/:id/state", async (req, res) => {
     await tx(async (c) => {
       const t = await owned(c, "tasks", req.actor, req.params.id, true);
       taskAccess(req.actor, t);
-      if (t.owner_id !== req.actor.id) requireCap(req.actor, "tasks.reassign");
+      if (t.owner_id && t.owner_id !== req.actor.id)
+        requireCap(req.actor, "tasks.reassign");
       version(t, b.version);
       taskTransition(t.status, b.status, b.reason);
       const r = (
@@ -176,7 +203,8 @@ work.post("/tasks/:id/contact", async (req, res) => {
     await tx(async (c) => {
       const t = await owned(c, "tasks", req.actor, req.params.id, true);
       taskAccess(req.actor, t);
-      if (t.owner_id !== req.actor.id) requireCap(req.actor, "tasks.reassign");
+      if (t.owner_id && t.owner_id !== req.actor.id)
+        requireCap(req.actor, "tasks.reassign");
       version(t, b.version);
       if (
         t.kind !== "follow_up" ||

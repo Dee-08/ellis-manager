@@ -99,14 +99,15 @@ export function HowPage() {
           <div>
             <p>
               Choose a personal practice account for your own work, or a clinic
-              account. Each has its own credentials and records.
+              practice. Records stay separate, with access controlled by
+              membership and permissions.
             </p>
             <p>
               You can use either on your own. In a clinic, add staff when you
               need them. Each person signs in separately; permissions determine
               what they can access, and job titles are optional.
             </p>
-            <a className="el-cta" href="/choose-account">
+            <a className="el-cta el-cta-secondary" href="/choose-account">
               Explore the account choices
             </a>
           </div>

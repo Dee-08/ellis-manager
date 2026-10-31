@@ -1,11 +1,14 @@
+import { PracticeConversion } from "./practice-conversion";
 import React, { useState } from "react";
 import { api } from "./api";
 import { Form, field, useData, Load, Pager } from "./workspace";
 const labels = {
+  "appointment.view": "View appointments",
+  "appointment.manage": "Book, change and check in appointments",
   "patients.view": "View patients",
   "patients.edit": "Edit patient demographics",
-  "notes.view": "View coordination notes",
-  "notes.draft": "Draft coordination notes",
+  "notes.view": "View clinical notes",
+  "notes.draft": "Write clinical notes",
   "notes.sign": "Sign and amend notes",
   "visits.manage": "Manage visits",
   "tasks.team": "View team tasks",
@@ -21,8 +24,7 @@ export function Team({ me }) {
   const [rev, setRev] = useState(0),
     [adding, setAdding] = useState(false),
     [editing, setEditing] = useState(null),
-    [link, setLink] = useState(""),
-    [error, setError] = useState(""),
+    [delivery, setDelivery] = useState(""),
     [caps, setCaps] = useState([]);
   const [people, e] = useData("/team", rev);
   const refresh = () => setRev((x) => x + 1);
@@ -53,7 +55,7 @@ export function Team({ me }) {
         <Form
           key={editing?.id || "new"}
           title={editing ? "Edit permissions" : "Add staff"}
-          submit={editing ? "Save permissions" : "Create activation link"}
+          submit={editing ? "Save permissions" : "Send invitation"}
           onCancel={() => {
             setAdding(false);
             setEditing(null);
@@ -69,8 +71,17 @@ export function Team({ me }) {
                   },
                   "PATCH",
                 )
-              : await api("/team", { ...b, capabilities: caps });
-            if (result.activationLink) setLink(result.activationLink);
+              : await api("/invitations", {
+                  email: b.email,
+                  title: b.title,
+                  capabilities: caps,
+                });
+            if (result.delivery)
+              setDelivery(
+                result.delivery === "local_mailbox"
+                  ? "Invitation written to the private local development mailbox. No email was sent."
+                  : "Invitation sent.",
+              );
             refresh();
             setAdding(false);
             setEditing(null);
@@ -78,7 +89,6 @@ export function Team({ me }) {
         >
           {!editing && (
             <>
-              {field("Name", "name", "", { required: true })}
               {field("Email", "email", "", { required: true, type: "email" })}
             </>
           )}
@@ -114,21 +124,7 @@ export function Team({ me }) {
           </p>
         </Form>
       )}
-      {link && (
-        <div className="activation">
-          <h3>Activation link created</h3>
-          <p>
-            No email has been sent. Share this link privately with the intended
-            staff member. It expires in 24 hours.
-          </p>
-          <label>
-            Activation link
-            <input readOnly value={link} onFocus={(e) => e.target.select()} />
-          </label>
-          <button onClick={() => setLink("")}>Hide link</button>
-        </div>
-      )}
-      {error && <Load error={error} />}
+      {delivery && <p role="status">{delivery}</p>}
       {!people ? (
         <Load error={e} />
       ) : (
@@ -155,20 +151,6 @@ export function Team({ me }) {
                   }}
                 >
                   Edit permissions
-                </button>
-                <button
-                  disabled={p.status === "disabled"}
-                  onClick={async () => {
-                    try {
-                      const r = await api("/team/" + p.id + "/rotate", {});
-                      setLink(r.activationLink);
-                      refresh();
-                    } catch (err) {
-                      setError(err.message);
-                    }
-                  }}
-                >
-                  New activation link
                 </button>
                 <details>
                   <summary>Revoke access</summary>
@@ -254,14 +236,14 @@ export function Settings({ me, reload }) {
         </section>
       )}
       <section className="notice">
-        <h3>Pilot boundaries</h3>
+        <h3>Development release</h3>
         <p>
-          Ellis is a coordination companion. Keep your authoritative clinical
-          records in your existing system. Owner recovery, reviewed
+          Use synthetic data while these workflows are being verified. Reviewed
           privacy/retention policies and production backup arrangements must be
           completed before real patient use.
         </p>
       </section>
+      <PracticeConversion me={me} reload={reload} />
       {me.kind === "clinic" && me.is_owner && (
         <details>
           <summary>Transfer clinic ownership</summary>

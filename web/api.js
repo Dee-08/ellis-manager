@@ -15,7 +15,7 @@ export async function api(path, body, method) {
     });
   } catch {
     throw new Error(
-      "Connection failed. Your changes have not been saved. Retry when connected.",
+      "Connection interrupted. The result is unknown. Check the latest record before submitting again.",
     );
   }
   const data = await response
@@ -24,6 +24,7 @@ export async function api(path, body, method) {
   if (!response.ok) {
     const e = new Error(data.error);
     e.status = response.status;
+    e.code = data.code;
     throw e;
   }
   return data;

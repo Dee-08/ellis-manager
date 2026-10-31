@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { api } from "./api";
+import { Schedule } from "./schedule";
 import { Team, Settings, Activity } from "./team";
 export const field = (label, name, value = "", props = {}) => (
   <label key={name}>
@@ -60,6 +61,8 @@ export function useData(path, revision = 0) {
     [error, setError] = useState("");
   useEffect(() => {
     let active = true;
+    setData(null);
+    setError("");
     api(path)
       .then((v) => {
         if (active) {
@@ -102,8 +105,10 @@ export function Pager({ offset, setOffset, count }) {
   );
 }
 export function Workspace() {
-  const [revision, setRevision] = useState(0);
+  const [revision, setRevision] = useState(0),
+    [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [me, error] = useData("/me", revision);
+  const [workspaces] = useData("/workspaces");
   const section = location.pathname.split("/")[2] || "today";
   if (!me)
     return (
@@ -113,11 +118,17 @@ export function Workspace() {
       </main>
     );
   const can = (c) => me.capabilities.includes(c);
+  const personal = me.kind === "personal";
   const nav = [
     ["today", "Today"],
-    ...(can("patients.view") ? [["patients", "Patients"]] : []),
-    ["tasks", "Tasks"],
-    ["follow-ups", "Follow-ups"],
+    ...(can("appointment.view")
+      ? [["schedule", personal ? "My schedule" : "Schedule"]]
+      : []),
+    ...(can("patients.view")
+      ? [["patients", personal ? "My patients" : "Patients"]]
+      : []),
+    ["tasks", personal ? "My tasks" : "Tasks"],
+    ["follow-ups", personal ? "My follow-ups" : "Follow-ups"],
     ["settings", "Settings"],
     ...(me.kind === "clinic" && can("staff.manage") ? [["team", "Team"]] : []),
     ...(can("audit.view") ? [["audit", "Activity"]] : []),
@@ -140,7 +151,20 @@ export function Workspace() {
           {me.practice_name}
           <small>{me.kind === "clinic" ? "Clinic" : "Personal practice"}</small>
         </p>
-        <nav aria-label="Practice">
+        <button
+          className="mobile-nav-toggle"
+          type="button"
+          aria-expanded={mobileNavOpen}
+          aria-controls="practice-navigation"
+          onClick={() => setMobileNavOpen((open) => !open)}
+        >
+          {mobileNavOpen ? "Close navigation" : "Practice menu"}
+        </button>
+        <nav
+          id="practice-navigation"
+          className={mobileNavOpen ? "is-open" : ""}
+          aria-label="Practice"
+        >
           {nav.map(([key, label]) => (
             <a
               key={key}
@@ -149,19 +173,23 @@ export function Workspace() {
               aria-current={section === key ? "page" : undefined}
             >
               {label}
-              <span>↗</span>
             </a>
           ))}
         </nav>
         <div className="identity">
           <strong>{me.name}</strong>
           <small>{me.title || "Your practice account"}</small>
+          {workspaces?.length > 1 && (
+            <a href="/workspaces">Switch practice</a>
+          )}
           <Signout />
         </div>
       </aside>
       <main id="work-main" className="work-main">
         <div className="work-top">
-          <span>{me.practice_name}</span>
+          <a href="/app/today" aria-label={me.practice_name + " Today"}>
+            {me.practice_name}
+          </a>
           <span>
             {new Intl.DateTimeFormat("en-GB", {
               timeZone: me.timezone,
@@ -170,11 +198,12 @@ export function Workspace() {
           </span>
         </div>
         <p className="pilot">
-          Coordination companion · Pilot · Use synthetic records until release
-          checks are complete.
+          Development · Use synthetic records until release checks are complete.
         </p>
         {error && <Load error={error} />}
-        {section === "patients" ? (
+        {section === "schedule" ? (
+          <Schedule me={me} />
+        ) : section === "patients" ? (
           <Patients me={me} />
         ) : section === "team" ? (
           <Team me={me} />
@@ -182,7 +211,9 @@ export function Workspace() {
           <Settings me={me} reload={() => setRevision((v) => v + 1)} />
         ) : section === "audit" ? (
           <Activity />
-        ) : ["today", "tasks", "follow-ups"].includes(section) ? (
+        ) : section === "today" ? (
+          <Today me={me} />
+        ) : ["tasks", "follow-ups"].includes(section) ? (
           <Tasks me={me} section={section} />
         ) : (
           <h1>Page not found.</h1>
@@ -216,8 +247,12 @@ function Patients({ me }) {
     [search, setSearch] = useState(""),
     [offset, setOffset] = useState(0),
     [rev, setRev] = useState(0),
-    [adding, setAdding] = useState(false),
-    [selected, setSelected] = useState(null);
+    [adding, setAdding] = useState(
+      () => new URLSearchParams(location.search).get("new") === "1",
+    ),
+    [selected, setSelected] = useState(
+      () => new URLSearchParams(location.search).get("patient"),
+    );
   const [patients, error] = useData(
     "/patients?q=" + encodeURIComponent(search) + "&offset=" + offset,
     rev,
@@ -231,6 +266,7 @@ function Patients({ me }) {
         me={me}
         back={() => {
           setSelected(null);
+          history.replaceState(null, "", location.pathname);
           refresh();
         }}
       />
@@ -710,7 +746,9 @@ function Tasks({ me, section }) {
   const [rev, setRev] = useState(0),
     [offset, setOffset] = useState(0),
     [adding, setAdding] = useState(false),
-    [selected, setSelected] = useState(null),
+    [selected, setSelected] = useState(
+      () => new URLSearchParams(location.search).get("task"),
+    ),
     [filter, setFilter] = useState("open"),
     [error, setError] = useState("");
   const [tasks, e] = useData(
@@ -866,7 +904,10 @@ function Tasks({ me, section }) {
           taskId={selected}
           me={me}
           refresh={refresh}
-          close={() => setSelected(null)}
+          close={() => {
+            setSelected(null);
+            history.replaceState(null, "", location.pathname);
+          }}
         />
       )}
     </>
@@ -897,6 +938,9 @@ function TaskDetail({ taskId, me, refresh, close }) {
       </p>
       <div className="actions">
         <button onClick={() => setMode("state")}>Status</button>
+        {!t.owner_id && can("tasks.complete") && (
+          <button onClick={() => setMode("claim")}>Pick up shared task</button>
+        )}
         {can("tasks.create") && (
           <button onClick={() => setMode("edit")}>
             Edit action / deadline
@@ -914,6 +958,21 @@ function TaskDetail({ taskId, me, refresh, close }) {
           </button>
         )}
       </div>
+      {mode === "claim" && (
+        <Form
+          title="Pick up this task"
+          submit="Assign to me"
+          onSave={async () => {
+            await api("/tasks/" + t.id + "/claim", { version: t.version });
+            done();
+          }}
+        >
+          <p>
+            You will become responsible for this task. Shared work can also be
+            completed without assignment.
+          </p>
+        </Form>
+      )}
       {mode === "state" && can("tasks.complete") && (
         <Form
           key={mode}
@@ -1059,4 +1118,270 @@ function TaskDetail({ taskId, me, refresh, close }) {
       )}
     </section>
   );
+}
+
+function Today({ me }) {
+  const [revision, setRevision] = useState(0);
+  const [data, error] = useData("/today", revision);
+  const date = new Intl.DateTimeFormat("en-GB", {
+    timeZone: me.timezone,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date());
+  const can = (capability) => me.capabilities.includes(capability);
+  return (
+    <div className="today-page">
+      <header className="today-heading">
+        <div>
+          <span className="eyebrow">{date}</span>
+          <h1>{me.kind === "personal" ? "My day" : "Today"}</h1>
+          <p>Appointments, active visits and work still to do.</p>
+        </div>
+        <div className="today-actions">
+          {can("appointment.manage") && (
+            <a className="button secondary" href="/app/schedule?new=1">
+              Book appointment
+            </a>
+          )}
+          {can("patients.edit") && (
+            <a className="button primary" href="/app/patients?new=1">
+              Register patient
+            </a>
+          )}
+        </div>
+      </header>
+      {!data ? (
+        <div className="today-load">
+          <Load error={error} />
+          {error && (
+            <button
+              className="button secondary"
+              onClick={() => setRevision((value) => value + 1)}
+            >
+              Try again
+            </button>
+          )}
+        </div>
+      ) : (
+        <>
+          <div className="today-counts" aria-label="Today's work at a glance">
+            <div>
+              <strong>{data.visits === null ? "—" : data.visits.length}</strong>
+              <span>Current visits</span>
+            </div>
+            <div>
+              <strong>{data.tasks.filter((task) => task.overdue).length}</strong>
+              <span>Overdue actions</span>
+            </div>
+            <div>
+              <strong>{data.tasks.length}</strong>
+              <span>Open actions</span>
+            </div>
+          </div>
+          <div className="today-columns">
+            <div className="today-primary-column">
+              {can("appointment.view") && <TodayAppointments me={me} />}
+              <section className="today-section" aria-labelledby="current-visits">
+                <div className="today-section-heading">
+                  <div>
+                    <span className="eyebrow">At the practice</span>
+                    <h2 id="current-visits">Current visits</h2>
+                  </div>
+                </div>
+                {data.visits === null ? (
+                  <p className="today-empty">
+                    Your membership does not include patient access.
+                  </p>
+                ) : data.visits.length ? (
+                  <div className="today-list">
+                    {data.visits.map((visit) => (
+                      <article className="today-row" key={visit.id}>
+                        <div>
+                          <a
+                            className="today-row-title"
+                            href={
+                              "/app/patients?patient=" +
+                              encodeURIComponent(visit.patient_id)
+                            }
+                          >
+                            {visit.patient_name}
+                          </a>
+                          <span className="today-row-meta">
+                            Arrived {formatPracticeTime(visit.arrived_at, me.timezone)}
+                          </span>
+                        </div>
+                        <span className="state-label">
+                          {visit.state.replaceAll("_", " ")}
+                        </span>
+                        <a
+                          className="text-link"
+                          href={
+                            "/app/patients?patient=" +
+                            encodeURIComponent(visit.patient_id)
+                          }
+                        >
+                          Open record
+                        </a>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="today-empty">
+                    No visits are in progress. Check the schedule or register a
+                    walk-in patient when they arrive.
+                  </p>
+                )}
+              </section>
+            </div>
+            <div className="today-secondary-column">
+              <section className="today-section" aria-labelledby="outstanding-work">
+                <div className="today-section-heading">
+                  <div>
+                    <span className="eyebrow">Next steps</span>
+                    <h2 id="outstanding-work">Outstanding work</h2>
+                  </div>
+                  <a className="text-link" href="/app/tasks">All tasks</a>
+                </div>
+                {data.tasks.length ? (
+                  <div className="today-work-list">
+                    {data.tasks.map((task) => (
+                      <a
+                        className="today-work-row"
+                        href={"/app/tasks?task=" + encodeURIComponent(task.id)}
+                        key={task.id}
+                      >
+                        <span
+                          className={
+                            "work-indicator" + (task.overdue ? " is-overdue" : "")
+                          }
+                          aria-hidden="true"
+                        />
+                        <span className="today-work-copy">
+                          <strong>{task.action}</strong>
+                          <small>
+                            {task.kind === "follow_up" ? "Follow-up" : "Task"} · {me.kind === "personal" ? "My practice" : task.owner_name}
+                          </small>
+                        </span>
+                        <span className={task.overdue ? "due-label overdue" : "due-label"}>
+                          {task.overdue
+                            ? "Overdue"
+                            : task.due_at
+                              ? formatPracticeTime(task.due_at, me.timezone)
+                              : "No deadline"}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="today-empty">
+                    No outstanding work. Follow-ups remain here until their work
+                    is complete.
+                  </p>
+                )}
+              </section>
+              <section className="today-next-step" aria-labelledby="keep-moving">
+                <span className="eyebrow">Keep care moving</span>
+                <h2 id="keep-moving">What needs attention next?</h2>
+                <p>
+                  Open a patient record, review the schedule or add a task with a
+                  clear owner and due time.
+                </p>
+                <a className="text-link" href="/app/follow-ups">
+                  Review follow-ups
+                </a>
+              </section>
+            </div>
+          </div>
+          <p className="today-footnote">
+            Showing up to {data.limit} visits and open actions. Counts follow
+            your workspace permissions.
+          </p>
+        </>
+      )}
+    </div>
+  );
+}
+function TodayAppointments({ me }) {
+  const date = practiceDate(me.timezone);
+  const [revision, setRevision] = useState(0);
+  const [appointments, error] = useData(
+    "/appointments?weekStart=" + date,
+    revision,
+  );
+  const today = (appointments || []).filter(
+    (appointment) => practiceDate(me.timezone, appointment.starts_at) === date,
+  );
+  return (
+    <section className="today-section" aria-labelledby="todays-schedule">
+      <div className="today-section-heading">
+        <div>
+          <span className="eyebrow">Coming up</span>
+          <h2 id="todays-schedule">Today’s schedule</h2>
+        </div>
+        <a className="text-link" href="/app/schedule">Full schedule</a>
+      </div>
+      {appointments === null ? (
+        <div>
+          <Load error={error} />
+          {error && (
+            <button
+              className="button secondary"
+              onClick={() => setRevision((value) => value + 1)}
+            >
+              Retry schedule
+            </button>
+          )}
+        </div>
+      ) : today.length ? (
+        <div className="today-list">
+          {today.map((appointment) => (
+            <article className="today-row" key={appointment.id}>
+              <span className="today-time">
+                {formatPracticeTime(appointment.starts_at, me.timezone, true)}
+              </span>
+              <div>
+                <a
+                  className="today-row-title"
+                  href={
+                    "/app/patients?patient=" +
+                    encodeURIComponent(appointment.patient_id)
+                  }
+                >
+                  {appointment.patient_name}
+                </a>
+                <span className="today-row-meta">{appointment.reason}</span>
+              </div>
+              <span className="state-label">
+                {appointment.state.replaceAll("_", " ")}
+              </span>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p className="today-empty">No appointments scheduled for today.</p>
+      )}
+    </section>
+  );
+}
+function practiceDate(timeZone, value = new Date()) {
+  const dateValue = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(dateValue.getTime())) return "";
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(dateValue);
+  const date = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  return `${date.year}-${date.month}-${date.day}`;
+}
+function formatPracticeTime(value, timeZone, timeOnly = false) {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    ...(timeOnly
+      ? { timeStyle: "short" }
+      : { dateStyle: "medium", timeStyle: "short" }),
+  }).format(new Date(value));
 }

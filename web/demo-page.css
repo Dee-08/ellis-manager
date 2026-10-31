@@ -1,0 +1,67 @@
+.demo-page {
+  padding: 160px 6vw 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  background: #fff;
+  color: #042617;
+}
+.demo-page h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1.1;
+}
+.demo-page header p {
+  max-width: 36rem;
+  line-height: 1.6;
+}
+.demo-form {
+  display: grid;
+  gap: 20px;
+  max-width: 640px;
+}
+.demo-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 16px;
+}
+.demo-form :is(input, select, textarea) {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #a9b4ae;
+  border-radius: 8px;
+  padding: 12px;
+  font: inherit;
+  color: #042617;
+  background: #fff;
+}
+.demo-form .demo-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.5;
+}
+.demo-consent input {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: #042617;
+}
+.demo-hint {
+  margin: 0;
+  font-size: 14px;
+}
+.demo-form button {
+  justify-self: start;
+}
+.demo-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+@media (max-width: 760px) {
+  .demo-page {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 120px 24px 48px;
+  }
+}

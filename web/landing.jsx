@@ -8,7 +8,8 @@ const links = [
   ["About us", "/about"],
   ["Contact", "/contact"],
   ["Sign in", "/sign-in"],
-  ["Create account", "/choose-account"],
+  ["Create Account", "/choose-account"],
+  ["Book a Demo", "/book-demo"],
 ];
 const journey = [
   [
@@ -132,7 +133,10 @@ export default function Landing() {
                 account.
               </p>
               <div className="el-programme-end">
-                <a className="el-cta" href="/sign-up?kind=personal">
+                <a
+                  className="el-cta el-cta-secondary"
+                  href="/sign-up?kind=personal"
+                >
                   Choose personal practice
                 </a>
               </div>
@@ -153,15 +157,19 @@ export default function Landing() {
                 credentials and permissions.
               </p>
               <div className="el-programme-end">
-                <a className="el-cta" href="/sign-up?kind=clinic">
+                <a
+                  className="el-cta el-cta-secondary"
+                  href="/sign-up?kind=clinic"
+                >
                   Choose clinic
                 </a>
               </div>
             </article>
           </div>
           <p className="el-account-note">
-            Personal practice and clinic are separate accounts. Their
-            credentials and records are never automatically linked.
+            Personal practice and clinic are separate accounts. Their records
+            stay separate. Your verified login can access practices you belong
+            to.
           </p>
         </section>
 
@@ -298,7 +306,13 @@ export function PublicHeader({ light = false, solid = false }) {
           <a
             href={href}
             key={href}
-            className={href === "/choose-account" ? "el-cta" : undefined}
+            className={
+              href === "/book-demo"
+                ? "el-cta"
+                : href === "/choose-account"
+                  ? "el-cta el-cta-secondary"
+                  : undefined
+            }
             aria-current={
               window.location.pathname === href ? "page" : undefined
             }
@@ -324,8 +338,8 @@ export function PublicFooter() {
           <br />
           moving.
         </h2>
-        <a className="el-cta" href="/choose-account">
-          Create your account
+        <a className="el-cta" href="/book-demo">
+          Book a Demo
         </a>
       </div>
       <div className="el-footer-grid">
